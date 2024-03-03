@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamingHistoryApi", "GamingHistoryApi\GamingHistoryApi.csproj", "{EA913F7A-3238-4D6C-83A9-08508943849E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EA913F7A-3238-4D6C-83A9-08508943849E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA913F7A-3238-4D6C-83A9-08508943849E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA913F7A-3238-4D6C-83A9-08508943849E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA913F7A-3238-4D6C-83A9-08508943849E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
