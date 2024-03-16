@@ -1,12 +1,12 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// builder.Services.AddCors(options =>
-// {
-//     options.AddDefaultPolicy(policy =>
-//     {
-//         policy.WithOrigins("https://gaming-history.barrlo.net"); // , "http://localhost:3000");
-//     });
-// });
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("https://gaming-history.barrlo.net"); // , "http://localhost:3000");
+    });
+});
 
 // Add services to the container.
 
@@ -34,7 +34,7 @@ app.UseSwaggerUI();
 // app.UseCors(localOrigins);
 // }
 
-// app.UseCors();
+app.UseCors();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 
