@@ -1,0 +1,55 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    
+env:
+  BUILD_VERSION: ${{ github.run_id }}-${{ github.run_number }}
+
+jobs:
+  continuous-deployment:
+    name: Build and Deploy to Azure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup .Net
+        uses: actions/setup-dotnet@v3
+        
+      - name: Restore Solution
+        run: |
+          dotnet restore GamingHistoryApi.sln
+
+      - name: Publish API
+        run: |
+          dotnet publish GamingHistoryApi/GamingHistoryApi.csproj --no-restore -o $HOME/.dotnet/GamingHistoryApi --verbosity minimal
+          
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: GamingHistoryApi-${{ env.BUILD_VERSION }}
+          path: ~/.dotnet/GamingHistoryApi
+
+      - name: Azure CLI Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: GamingHistoryApi-${{ env.BUILD_VERSION }}
+
+      - name: Get Publish Profile
+        run: |
+          echo "API_PUBLISH_PROFILE={az webapp deployment list-publishing-profiles --name ase-api-bgh-prod-eastus --xml}" >> $env:GITHUB_ENV
+
+      - name: Deploy API
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'api-bgh-prod-eastus'
+          publish-profile: ${{ env.API_PUBLISH_PROFILE }}
