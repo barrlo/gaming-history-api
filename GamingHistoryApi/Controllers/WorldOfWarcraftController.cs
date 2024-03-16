@@ -8,11 +8,6 @@ namespace GamingHistoryApi.Controllers;
 [Route("wow")]
 public class WorldOfWarcraftController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
     private readonly ILogger<WorldOfWarcraftController> _logger;
 
     public WorldOfWarcraftController(ILogger<WorldOfWarcraftController> logger)
@@ -20,14 +15,26 @@ public class WorldOfWarcraftController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet(Name = "GetMythicPlusData")]
-    public IEnumerable<MythicPlusData> GetMythicPlusData()
+    [HttpGet]
+    [Route("characters")]
+    public IEnumerable<WorldOfWarcraftCharacter> GetCharacters()
     {
         JsonSerializerOptions options = new(JsonSerializerDefaults.Web);
-        var mythicPlusData = JsonSerializer.Deserialize<MythicPlusData>(
-            "{\"character\": {\"key\": {\"href\": \"https://us.api.blizzard.com/profile/wow/character/hellscream/barrlidan?namespace=profile-us\"},\"name\": \"Barrlidan\",\"id\": 194665345,\"realm\": {\"key\": {\"href\": \"https://us.api.blizzard.com/data/wow/realm/53?namespace=dynamic-us\"},\"name\": \"Hellscream\",\"id\": 53,\"slug\": \"hellscream\"}},\"current_mythic_rating\": {\"color\": {\"r\": 255,\"g\": 128,\"b\": 0,\"a\": 1},\"rating\": 3223.6477}}",
+        return JsonSerializer.Deserialize<WorldOfWarcraftCharacter[]>(
+            "[{\"id\": 194665345,\"name\": \"Barrlidan\",\"mythicPlusScore\": 3223.6477,\"itemLevel\": 485},{\"id\": 2,\"name\": \"Barrlo\",\"mythicPlusScore\": 2562.5,\"itemLevel\": 480}]",
             options
         );
-        return new MythicPlusData[] { mythicPlusData };
     }
+
+    // [HttpGet]
+    // [Route("mythic-plus")]
+    // public IEnumerable<MythicPlusData> GetMythicPlusData()
+    // {
+    //     JsonSerializerOptions options = new(JsonSerializerDefaults.Web);
+    //     var mythicPlusData = JsonSerializer.Deserialize<MythicPlusData>(
+    //         "{\"character\": {\"name\": \"Barrlidan\",\"id\": 194665345},\"current_mythic_rating\": {\"rating\": 3223.6477}}",
+    //         options
+    //     );
+    //     return new MythicPlusData[] { mythicPlusData };
+    // }
 }
