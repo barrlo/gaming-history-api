@@ -51,6 +51,6 @@ jobs:
       - name: Deploy API
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'api-bgh-prod-eastus'
+          app-name: 'ase-api-bgh-prod-eastus'
           publish-profile: ${{ env.API_PUBLISH_PROFILE }}
           package: 'GamingHistoryApiArtifact'
