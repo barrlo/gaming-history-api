@@ -26,23 +26,23 @@ jobs:
 
       - name: Publish API
         run: |
-          dotnet publish GamingHistoryApi/GamingHistoryApi.csproj --no-restore -o $HOME/.dotnet/GamingHistoryApi --verbosity minimal
+          dotnet publish GamingHistoryApi/GamingHistoryApi.csproj --no-restore -o GamingHistoryApiArtifact --verbosity minimal
           
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: GamingHistoryApi-${{ env.BUILD_VERSION }}
-          path: ~/.dotnet/GamingHistoryApi
+#      - name: Upload Artifact
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: GamingHistoryApi-${{ env.BUILD_VERSION }}
+#          path: ~/.dotnet/GamingHistoryApi
 
       - name: Azure CLI Login
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           
-      - name: Download Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: GamingHistoryApi-${{ env.BUILD_VERSION }}
+#      - name: Download Artifact
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: GamingHistoryApi-${{ env.BUILD_VERSION }}
 
       - name: Get Publish Profile
         run: |
@@ -53,3 +53,4 @@ jobs:
         with:
           app-name: 'api-bgh-prod-eastus'
           publish-profile: ${{ env.API_PUBLISH_PROFILE }}
+          package: 'GamingHistoryApiArtifact'
