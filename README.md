@@ -30,6 +30,10 @@ Mock__CurrentFailureCharacterIds__0=char-aeloria dotnet run --project src/Gaming
 
 The second command simulates an independent current-score failure while history stays available. All six scenario names are in contracts/v1/fixtures/manifest.json. Invalid scenario configuration fails startup. Swagger UI assets are served locally by Swashbuckle.AspNetCore.SwaggerUI; the specification is the canonical file, not an inferred/generated replacement.
 
+Season metadata in all mock responses now comes from `SeasonCalendar`, evaluated at the selected scenario's frozen clock. The independent fictional definitions preserve stable IDs and the approved fixtures. Starts are inclusive, ends exclusive; a configured gap returns a null season. Unknown ends use the next configured season start or, if there is none, nine calendar months with month-end clamping. Inferred dates stay marked estimated. Announced ends win; invalid durations, duplicate IDs, and confirmed overlaps fail configuration validation. Invalid configuration is not treated as an empty season gap. The mock catalog is configured at startup; mapping future runtime catalog failures to `season_unavailable` remains part of the persistence integration.
+
+The calendar also provides Tuesday 15:00 UTC weekly boundaries and clips partial weeks to season dates. Weekly-history projection still replays fixtures; it will consume these calendar rules in the next checkpoint. No automatic page refresh or new response fields are introduced.
+
 Only read endpoints exist. No Blizzard credentials, external requests, cloud resources, login, database or collector are used. HTTP tests cover fixture responses, selector/character error precedence, per-character failures, conditional responses and Swagger delivery. They do not claim production projection or caching is implemented. No CORS policy is needed for the UI's same-origin Vite proxy.
 
 ## Scaffold verification (2026-09-18)
