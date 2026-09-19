@@ -14,8 +14,8 @@ public sealed class SeasonCalendarTests
     public void ShouldSelectSeasonAtInclusiveStartAndExclusiveEnd(string timestamp, string? expected)
     {
         var calendar = new SeasonCalendar([
-            new("second", "Second", Instant("2026-10-20T15:00:00Z"), Instant("2027-01-19T15:00:00Z")),
-            new("first", "First", Instant("2026-07-21T15:00:00Z"), Instant("2026-10-20T15:00:00Z"))
+            new SeasonDefinition("second", "Second", Instant("2026-10-20T15:00:00Z"), Instant("2027-01-19T15:00:00Z")),
+            new SeasonDefinition("first", "First", Instant("2026-07-21T15:00:00Z"), Instant("2026-10-20T15:00:00Z"))
         ]);
 
         Assert.Equal(expected, calendar.GetCurrentSeason(Instant(timestamp))?.Id);
@@ -25,8 +25,8 @@ public sealed class SeasonCalendarTests
     public void ShouldReturnNoSeasonDuringConfiguredGap()
     {
         var calendar = new SeasonCalendar([
-            new("first", "First", Instant("2026-07-21T15:00:00Z"), Instant("2026-10-20T15:00:00Z")),
-            new("next", "Next", Instant("2026-11-03T15:00:00Z"))
+            new SeasonDefinition("first", "First", Instant("2026-07-21T15:00:00Z"), Instant("2026-10-20T15:00:00Z")),
+            new SeasonDefinition("next", "Next", Instant("2026-11-03T15:00:00Z"))
         ]);
 
         Assert.Null(calendar.GetCurrentSeason(Instant("2026-10-27T15:00:00Z")));
@@ -38,7 +38,7 @@ public sealed class SeasonCalendarTests
     [InlineData("2026-10-20T10:00:00-05:00", "2027-07-20T15:00:00Z")]
     public void ShouldEstimateNineCalendarMonthsWithUtcTimeAndMonthEndClamping(string start, string end)
     {
-        var calendar = new SeasonCalendar([new("stable-id", "Season", Instant(start))]);
+        var calendar = new SeasonCalendar([new SeasonDefinition("stable-id", "Season", Instant(start))]);
         var season = calendar.GetCurrentSeason(Instant(start));
 
         Assert.NotNull(season);
@@ -56,7 +56,7 @@ public sealed class SeasonCalendarTests
         var start = Instant("2026-07-21T15:00:00Z");
         var nextStart = Instant(successorStart);
         var calendar = new SeasonCalendar([
-            new("first", "First", start), new("next", "Next", nextStart)
+            new SeasonDefinition("first", "First", start), new SeasonDefinition("next", "Next", nextStart)
         ]);
         var first = calendar.GetCurrentSeason(start);
 
@@ -72,7 +72,7 @@ public sealed class SeasonCalendarTests
     {
         var start = Instant("2026-07-21T15:00:00Z");
         var announcedEnd = start.AddMonths(3);
-        var calendar = new SeasonCalendar([new("stable-id", "Season", start, announcedEnd)]);
+        var calendar = new SeasonCalendar([new SeasonDefinition("stable-id", "Season", start, announcedEnd)]);
         var season = calendar.GetCurrentSeason(start);
 
         Assert.NotNull(season);
@@ -87,18 +87,18 @@ public sealed class SeasonCalendarTests
         var start = Instant("2026-07-21T15:00:00Z");
 
         Assert.Throws<ArgumentException>(() => new SeasonCalendar([]));
-        Assert.Throws<ArgumentException>(() => new SeasonCalendar([new("", "Season", start)]));
-        Assert.Throws<ArgumentException>(() => new SeasonCalendar([new("first", "", start)]));
-        Assert.Throws<ArgumentException>(() => new SeasonCalendar([new("first", "First", start, start)]));
-        Assert.Throws<ArgumentException>(() => new SeasonCalendar([new("first", "First", start, start.AddDays(-1))]));
+        Assert.Throws<ArgumentException>(() => new SeasonCalendar([new SeasonDefinition("", "Season", start)]));
+        Assert.Throws<ArgumentException>(() => new SeasonCalendar([new SeasonDefinition("first", "", start)]));
+        Assert.Throws<ArgumentException>(() => new SeasonCalendar([new SeasonDefinition("first", "First", start, start)]));
+        Assert.Throws<ArgumentException>(() => new SeasonCalendar([new SeasonDefinition("first", "First", start, start.AddDays(-1))]));
         Assert.Throws<ArgumentException>(() => new SeasonCalendar([
-            new("same", "First", start, start.AddMonths(1)), new("same", "Next", start.AddMonths(2))
+            new SeasonDefinition("same", "First", start, start.AddMonths(1)), new SeasonDefinition("same", "Next", start.AddMonths(2))
         ]));
         Assert.Throws<ArgumentException>(() => new SeasonCalendar([
-            new("first", "First", start, start.AddMonths(3)), new("next", "Next", start.AddMonths(2))
+            new SeasonDefinition("first", "First", start, start.AddMonths(3)), new SeasonDefinition("next", "Next", start.AddMonths(2))
         ]));
         Assert.Throws<ArgumentException>(() => new SeasonCalendar([
-            new("first", "First", start), new("next", "Next", start)
+            new SeasonDefinition("first", "First", start), new SeasonDefinition("next", "Next", start)
         ]));
     }
 
@@ -123,7 +123,7 @@ public sealed class SeasonCalendarTests
     {
         var start = Instant("2026-07-23T17:00:00Z");
         var end = Instant("2026-08-01T18:00:00Z");
-        var calendar = new SeasonCalendar([new("partial", "Partial", start, end)]);
+        var calendar = new SeasonCalendar([new SeasonDefinition("partial", "Partial", start, end)]);
         var season = calendar.GetCurrentSeason(start)!;
         var first = SeasonCalendar.GetSeasonWeek(season, start);
         var last = SeasonCalendar.GetSeasonWeek(season, end.AddTicks(-1));

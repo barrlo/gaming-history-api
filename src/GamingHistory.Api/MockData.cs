@@ -90,7 +90,7 @@ public sealed class MockData
             ["endsAt"] = _season.EndsAt.UtcDateTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture),
             ["id"] = _season.Id,
             ["name"] = _season.Name,
-            ["region"] = _season.Region,
+            ["region"] = Season.Region,
             ["startsAt"] = _season.StartsAt.UtcDateTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture)
         };
 

@@ -4,7 +4,7 @@ public sealed record SeasonDefinition(string Id, string Name, DateTimeOffset Sta
 
 public sealed record Season(string Id, string Name, DateTimeOffset StartsAt, DateTimeOffset EndsAt, bool EndDateEstimated)
 {
-    public string Region => "us";
+    public static string Region => "us";
 }
 
 // Dates describe configured seasons; an estimated end never invents the next season.
