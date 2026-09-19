@@ -1,0 +1,90 @@
+{
+  "dataMode": "mock",
+  "season": {
+    "id": "demo-season",
+    "name": "Demo season",
+    "region": "us",
+    "startsAt": "2026-07-21T15:00:00Z",
+    "endsAt": "2026-10-20T15:00:00Z",
+    "endDateEstimated": false
+  },
+  "character": {
+    "id": "char-aeloria",
+    "name": "Aeloria",
+    "classKey": "paladin",
+    "realm": {
+      "slug": "stormrage",
+      "name": "Stormrage"
+    }
+  },
+  "weeks": [
+    {
+      "index": 1,
+      "startsAt": "2026-07-21T15:00:00Z",
+      "endsAt": "2026-07-28T15:00:00Z",
+      "isProvisional": false,
+      "status": "observed",
+      "score": 820,
+      "sourceObservedAt": "2026-07-28T11:00:00Z"
+    },
+    {
+      "index": 2,
+      "startsAt": "2026-07-28T15:00:00Z",
+      "endsAt": "2026-08-04T15:00:00Z",
+      "isProvisional": false,
+      "status": "observed",
+      "score": 1320,
+      "sourceObservedAt": "2026-08-04T11:00:00Z"
+    },
+    {
+      "index": 3,
+      "startsAt": "2026-08-04T15:00:00Z",
+      "endsAt": "2026-08-11T15:00:00Z",
+      "isProvisional": false,
+      "status": "observed",
+      "score": 1650,
+      "sourceObservedAt": "2026-08-11T11:00:00Z"
+    },
+    {
+      "index": 4,
+      "startsAt": "2026-08-11T15:00:00Z",
+      "endsAt": "2026-08-18T15:00:00Z",
+      "isProvisional": false,
+      "status": "observed",
+      "score": 1920,
+      "sourceObservedAt": "2026-08-18T11:00:00Z"
+    },
+    {
+      "index": 5,
+      "startsAt": "2026-08-18T15:00:00Z",
+      "endsAt": "2026-08-25T15:00:00Z",
+      "isProvisional": false,
+      "status": "carriedForward",
+      "score": 1920,
+      "sourceObservedAt": "2026-08-18T11:00:00Z"
+    },
+    {
+      "index": 6,
+      "startsAt": "2026-08-25T15:00:00Z",
+      "endsAt": "2026-09-01T15:00:00Z",
+      "isProvisional": false,
+      "status": "observed",
+      "score": 2260,
+      "sourceObservedAt": "2026-09-01T11:00:00Z"
+    },
+    {
+      "index": 7,
+      "startsAt": "2026-09-01T15:00:00Z",
+      "endsAt": "2026-09-08T15:00:00Z",
+      "isProvisional": false,
+      "status": "observed",
+      "score": 2362,
+      "sourceObservedAt": "2026-09-08T11:00:00Z"
+    }
+  ],
+  "weeklySummary": {
+    "latestScore": 2362,
+    "weeklyChange": 102,
+    "lastObservedAt": "2026-09-08T11:00:00Z"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "type": "about:blank",
+  "title": "Internal Server Error",
+  "status": 500,
+  "code": "unexpected_error",
+  "traceId": "fixture-trace-unexpected_error"
+}

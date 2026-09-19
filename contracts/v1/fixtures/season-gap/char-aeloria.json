@@ -1,0 +1,19 @@
+{
+  "dataMode": "mock",
+  "season": null,
+  "character": {
+    "id": "char-aeloria",
+    "name": "Aeloria",
+    "classKey": "paladin",
+    "realm": {
+      "slug": "stormrage",
+      "name": "Stormrage"
+    }
+  },
+  "weeks": [],
+  "weeklySummary": {
+    "latestScore": null,
+    "weeklyChange": null,
+    "lastObservedAt": null
+  }
+}

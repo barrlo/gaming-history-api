@@ -1,0 +1,7 @@
+{
+  "type": "about:blank",
+  "title": "Service Unavailable",
+  "status": 503,
+  "code": "season_unavailable",
+  "traceId": "fixture-trace-season_unavailable"
+}

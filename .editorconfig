@@ -1,0 +1,21 @@
+root = true
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+[*.{json,yml,yaml}]
+indent_size = 2
+
+[*.cs]
+csharp_prefer_braces = true:warning
+csharp_preserve_single_line_blocks = false
+csharp_preserve_single_line_statements = false
+dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.IDE0011.severity = warning
+dotnet_diagnostic.IDE2003.severity = warning
+dotnet_style_allow_statement_immediately_after_block_experimental = false:warning
+resharper_csharp_blank_lines_after_block_statements = 1
+resharper_csharp_blank_lines_before_block_statements = 1
+resharper_csharp_blank_lines_before_control_transfer_statements = 1

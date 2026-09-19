@@ -1,0 +1,19 @@
+{
+  "dataMode": "mock",
+  "season": null,
+  "character": {
+    "id": "char-vaelis",
+    "name": "Vaelis",
+    "classKey": "druid",
+    "realm": {
+      "slug": "sargeras",
+      "name": "Sargeras"
+    }
+  },
+  "weeks": [],
+  "weeklySummary": {
+    "latestScore": null,
+    "weeklyChange": null,
+    "lastObservedAt": null
+  }
+}

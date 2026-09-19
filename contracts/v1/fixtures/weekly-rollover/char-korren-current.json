@@ -1,0 +1,17 @@
+{
+  "dataMode": "mock",
+  "characterId": "char-korren",
+  "season": {
+    "id": "demo-season",
+    "name": "Demo season",
+    "region": "us",
+    "startsAt": "2026-07-21T15:00:00Z",
+    "endsAt": "2026-10-20T15:00:00Z",
+    "endDateEstimated": false
+  },
+  "score": null,
+  "fetchedAt": "2026-09-15T15:00:00Z",
+  "weeklyChange": null,
+  "baselineScore": null,
+  "baselineWeekIndex": 8
+}

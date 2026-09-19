@@ -1,0 +1,17 @@
+{
+  "dataMode": "mock",
+  "characterId": "char-vaelis",
+  "season": {
+    "id": "demo-season-2",
+    "name": "Demo season 2",
+    "region": "us",
+    "startsAt": "2026-10-20T15:00:00Z",
+    "endsAt": "2027-07-20T15:00:00Z",
+    "endDateEstimated": true
+  },
+  "score": null,
+  "fetchedAt": "2026-10-20T15:00:00Z",
+  "weeklyChange": null,
+  "baselineScore": null,
+  "baselineWeekIndex": null
+}

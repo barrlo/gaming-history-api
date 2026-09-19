@@ -1,0 +1,7 @@
+{
+  "type": "about:blank",
+  "title": "Too Many Requests",
+  "status": 429,
+  "code": "rate_limited",
+  "traceId": "fixture-trace-rate_limited"
+}

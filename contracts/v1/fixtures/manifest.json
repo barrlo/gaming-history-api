@@ -1,0 +1,177 @@
+{
+  "contractVersion": "0.3.0-review",
+  "scenarios": [
+    {
+      "name": "populated",
+      "clock": "2026-09-15T12:00:00Z",
+      "roster": "fixtures/populated/roster.json",
+      "histories": [
+        "fixtures/populated/char-aeloria.json",
+        "fixtures/populated/char-thalren.json",
+        "fixtures/populated/char-vaelis.json",
+        "fixtures/populated/char-korren.json"
+      ],
+      "observations": "fixtures/populated/observations.json",
+      "currentScores": [
+        "fixtures/populated/char-aeloria-current.json",
+        "fixtures/populated/char-thalren-current.json",
+        "fixtures/populated/char-vaelis-current.json",
+        "fixtures/populated/char-korren-current.json"
+      ],
+      "description": "Roster identities joined in UI with shared per-character currentScores; history remains scheduled completed-week observations.",
+      "rosterDisplay": "fixtures/populated/roster-display.json"
+    },
+    {
+      "name": "empty-roster",
+      "clock": "2026-09-15T12:00:00Z",
+      "roster": "fixtures/empty-roster/roster.json",
+      "histories": [],
+      "observations": "fixtures/empty-roster/observations.json",
+      "currentScores": [],
+      "description": "Roster identities joined in UI with shared per-character currentScores; history remains scheduled completed-week observations.",
+      "rosterDisplay": "fixtures/empty-roster/roster-display.json"
+    },
+    {
+      "name": "zero-and-ties",
+      "clock": "2026-09-15T12:00:00Z",
+      "roster": "fixtures/zero-and-ties/roster.json",
+      "histories": [
+        "fixtures/zero-and-ties/char-aeloria.json",
+        "fixtures/zero-and-ties/char-thalren.json",
+        "fixtures/zero-and-ties/char-vaelis.json",
+        "fixtures/zero-and-ties/char-korren.json"
+      ],
+      "observations": "fixtures/zero-and-ties/observations.json",
+      "currentScores": [
+        "fixtures/zero-and-ties/char-aeloria-current.json",
+        "fixtures/zero-and-ties/char-thalren-current.json",
+        "fixtures/zero-and-ties/char-vaelis-current.json",
+        "fixtures/zero-and-ties/char-korren-current.json"
+      ],
+      "description": "Roster identities joined in UI with shared per-character currentScores; history remains scheduled completed-week observations.",
+      "rosterDisplay": "fixtures/zero-and-ties/roster-display.json"
+    },
+    {
+      "name": "season-gap",
+      "clock": "2026-10-27T12:00:00Z",
+      "roster": "fixtures/season-gap/roster.json",
+      "histories": [
+        "fixtures/season-gap/char-aeloria.json",
+        "fixtures/season-gap/char-thalren.json",
+        "fixtures/season-gap/char-vaelis.json",
+        "fixtures/season-gap/char-korren.json"
+      ],
+      "observations": "fixtures/season-gap/observations.json",
+      "currentScores": [
+        "fixtures/season-gap/char-aeloria-current.json",
+        "fixtures/season-gap/char-thalren-current.json",
+        "fixtures/season-gap/char-vaelis-current.json",
+        "fixtures/season-gap/char-korren-current.json"
+      ],
+      "description": "Roster identities joined in UI with shared per-character currentScores; history remains scheduled completed-week observations.",
+      "rosterDisplay": "fixtures/season-gap/roster-display.json"
+    },
+    {
+      "name": "weekly-rollover",
+      "clock": "2026-09-15T15:00:00Z",
+      "roster": "fixtures/weekly-rollover/roster.json",
+      "histories": [
+        "fixtures/weekly-rollover/char-aeloria.json",
+        "fixtures/weekly-rollover/char-thalren.json",
+        "fixtures/weekly-rollover/char-vaelis.json",
+        "fixtures/weekly-rollover/char-korren.json"
+      ],
+      "observations": "fixtures/weekly-rollover/observations.json",
+      "currentScores": [
+        "fixtures/weekly-rollover/char-aeloria-current.json",
+        "fixtures/weekly-rollover/char-thalren-current.json",
+        "fixtures/weekly-rollover/char-vaelis-current.json",
+        "fixtures/weekly-rollover/char-korren-current.json"
+      ],
+      "description": "Roster identities joined in UI with shared per-character currentScores; history remains scheduled completed-week observations.",
+      "rosterDisplay": "fixtures/weekly-rollover/roster-display.json"
+    },
+    {
+      "name": "season-start",
+      "clock": "2026-10-20T15:00:00Z",
+      "roster": "fixtures/season-start/roster.json",
+      "histories": [
+        "fixtures/season-start/char-aeloria.json",
+        "fixtures/season-start/char-thalren.json",
+        "fixtures/season-start/char-vaelis.json",
+        "fixtures/season-start/char-korren.json"
+      ],
+      "observations": "fixtures/season-start/observations.json",
+      "currentScores": [
+        "fixtures/season-start/char-aeloria-current.json",
+        "fixtures/season-start/char-thalren-current.json",
+        "fixtures/season-start/char-vaelis-current.json",
+        "fixtures/season-start/char-korren-current.json"
+      ],
+      "description": "Roster identities joined in UI with shared per-character currentScores; history remains scheduled completed-week observations.",
+      "rosterDisplay": "fixtures/season-start/roster-display.json"
+    }
+  ],
+  "errors": [
+    {
+      "file": "fixtures/character_not_found.json",
+      "schema": "Problem",
+      "status": 404,
+      "headers": {
+        "Content-Type": "application/problem+json",
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "file": "fixtures/invalid_season_selector.json",
+      "schema": "Problem",
+      "status": 400,
+      "headers": {
+        "Content-Type": "application/problem+json",
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "file": "fixtures/season_unavailable.json",
+      "schema": "Problem",
+      "status": 503,
+      "headers": {
+        "Content-Type": "application/problem+json",
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "file": "fixtures/data_unavailable.json",
+      "schema": "Problem",
+      "status": 503,
+      "headers": {
+        "Content-Type": "application/problem+json",
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "file": "fixtures/unexpected_error.json",
+      "schema": "Problem",
+      "status": 500,
+      "headers": {
+        "Content-Type": "application/problem+json",
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "file": "fixtures/rate_limited.json",
+      "schema": "Problem",
+      "status": 429,
+      "headers": {
+        "Content-Type": "application/problem+json",
+        "Cache-Control": "no-store",
+        "Retry-After": "60"
+      }
+    }
+  ],
+  "currentFetchError": {
+    "file": "fixtures/data_unavailable.json",
+    "status": 503,
+    "preserveHistory": true
+  }
+}

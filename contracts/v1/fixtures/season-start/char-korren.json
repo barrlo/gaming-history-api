@@ -1,0 +1,26 @@
+{
+  "dataMode": "mock",
+  "season": {
+    "id": "demo-season-2",
+    "name": "Demo season 2",
+    "region": "us",
+    "startsAt": "2026-10-20T15:00:00Z",
+    "endsAt": "2027-07-20T15:00:00Z",
+    "endDateEstimated": true
+  },
+  "character": {
+    "id": "char-korren",
+    "name": "Korren",
+    "classKey": "warrior",
+    "realm": {
+      "slug": "sargeras",
+      "name": "Sargeras"
+    }
+  },
+  "weeks": [],
+  "weeklySummary": {
+    "latestScore": null,
+    "weeklyChange": null,
+    "lastObservedAt": null
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "dataMode": "mock",
+  "season": null,
+  "character": {
+    "id": "char-thalren",
+    "name": "Thalren",
+    "classKey": "mage",
+    "realm": {
+      "slug": "stormrage",
+      "name": "Stormrage"
+    }
+  },
+  "weeks": [],
+  "weeklySummary": {
+    "latestScore": null,
+    "weeklyChange": null,
+    "lastObservedAt": null
+  }
+}

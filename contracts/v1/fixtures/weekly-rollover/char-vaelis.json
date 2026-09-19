@@ -1,0 +1,99 @@
+{
+  "dataMode": "mock",
+  "season": {
+    "id": "demo-season",
+    "name": "Demo season",
+    "region": "us",
+    "startsAt": "2026-07-21T15:00:00Z",
+    "endsAt": "2026-10-20T15:00:00Z",
+    "endDateEstimated": false
+  },
+  "character": {
+    "id": "char-vaelis",
+    "name": "Vaelis",
+    "classKey": "druid",
+    "realm": {
+      "slug": "sargeras",
+      "name": "Sargeras"
+    }
+  },
+  "weeks": [
+    {
+      "index": 1,
+      "startsAt": "2026-07-21T15:00:00Z",
+      "endsAt": "2026-07-28T15:00:00Z",
+      "isProvisional": false,
+      "status": "unobserved",
+      "score": null,
+      "sourceObservedAt": null
+    },
+    {
+      "index": 2,
+      "startsAt": "2026-07-28T15:00:00Z",
+      "endsAt": "2026-08-04T15:00:00Z",
+      "isProvisional": false,
+      "status": "unobserved",
+      "score": null,
+      "sourceObservedAt": null
+    },
+    {
+      "index": 3,
+      "startsAt": "2026-08-04T15:00:00Z",
+      "endsAt": "2026-08-11T15:00:00Z",
+      "isProvisional": false,
+      "status": "observed",
+      "score": 600,
+      "sourceObservedAt": "2026-08-11T11:00:00Z"
+    },
+    {
+      "index": 4,
+      "startsAt": "2026-08-11T15:00:00Z",
+      "endsAt": "2026-08-18T15:00:00Z",
+      "isProvisional": false,
+      "status": "observed",
+      "score": 900,
+      "sourceObservedAt": "2026-08-18T11:00:00Z"
+    },
+    {
+      "index": 5,
+      "startsAt": "2026-08-18T15:00:00Z",
+      "endsAt": "2026-08-25T15:00:00Z",
+      "isProvisional": false,
+      "status": "observed",
+      "score": 1400,
+      "sourceObservedAt": "2026-08-25T11:00:00Z"
+    },
+    {
+      "index": 6,
+      "startsAt": "2026-08-25T15:00:00Z",
+      "endsAt": "2026-09-01T15:00:00Z",
+      "isProvisional": false,
+      "status": "observed",
+      "score": 1600,
+      "sourceObservedAt": "2026-09-01T11:00:00Z"
+    },
+    {
+      "index": 7,
+      "startsAt": "2026-09-01T15:00:00Z",
+      "endsAt": "2026-09-08T15:00:00Z",
+      "isProvisional": false,
+      "status": "observed",
+      "score": 1764,
+      "sourceObservedAt": "2026-09-08T11:00:00Z"
+    },
+    {
+      "index": 8,
+      "startsAt": "2026-09-08T15:00:00Z",
+      "endsAt": "2026-09-15T15:00:00Z",
+      "isProvisional": false,
+      "status": "carriedForward",
+      "score": 1764,
+      "sourceObservedAt": "2026-09-08T11:00:00Z"
+    }
+  ],
+  "weeklySummary": {
+    "latestScore": 1764,
+    "weeklyChange": 0,
+    "lastObservedAt": "2026-09-08T11:00:00Z"
+  }
+}

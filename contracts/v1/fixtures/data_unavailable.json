@@ -1,0 +1,7 @@
+{
+  "type": "about:blank",
+  "title": "Service Unavailable",
+  "status": 503,
+  "code": "data_unavailable",
+  "traceId": "fixture-trace-data_unavailable"
+}

@@ -1,0 +1,1052 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Gaming History API",
+    "version": "0.3.0-review",
+    "description": "Public read-only contract candidate. UTC dates; unknown optional fields are ignored."
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "paths": {
+    "/api/v1/wow/characters": {
+      "get": {
+        "operationId": "listWowCharacters",
+        "tags": [
+          "WoW"
+        ],
+        "parameters": [
+          {
+            "name": "If-None-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Standard conditional GET; matching successful representation yields bodyless 304."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response; null and empty are valid data states.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Roster"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified; no response body.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Nonnegative delay in seconds or HTTP date.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Unavailable season configuration or stored data",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "description": "Returns tracked character identities and resolved season, without score ranking or provider fan-out. UI requests current-score per character, shares results with detail, and sorts successful numeric scores descending; null/unavailable scores last. Tie-break by normalized name, realm slug, then stable ID. This endpoint never fetches current scores."
+      }
+    },
+    "/api/v1/wow/characters/{characterId}/history": {
+      "get": {
+        "operationId": "getWowCharacterHistory",
+        "tags": [
+          "WoW"
+        ],
+        "parameters": [
+          {
+            "name": "If-None-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Standard conditional GET; matching successful representation yields bodyless 304."
+          },
+          {
+            "name": "characterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "current"
+              ],
+              "default": "current"
+            },
+            "description": "Only current is supported initially. Explicit IDs are reserved for future past-season browsing."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response; null and empty are valid data states.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/History"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified; no response body.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid season selector",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unknown tracked character",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Nonnegative delay in seconds or HTTP date.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Unavailable season configuration or stored data",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "getHealth",
+        "responses": {
+          "200": {
+            "description": "Process liveness only",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/docs": {
+      "get": {
+        "operationId": "getSwaggerUi",
+        "responses": {
+          "200": {
+            "description": "Swagger UI; assets remain under /api/docs/",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/openapi/v1.json": {
+      "get": {
+        "operationId": "getOpenApiDocument",
+        "responses": {
+          "200": {
+            "description": "Authoritative OpenAPI document",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "openapi",
+                    "info",
+                    "paths"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/wow/characters/{characterId}/current-score": {
+      "get": {
+        "operationId": "getWowCurrentScore",
+        "tags": [
+          "WoW"
+        ],
+        "parameters": [
+          {
+            "name": "If-None-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Standard conditional GET; matching successful representation yields bodyless 304."
+          },
+          {
+            "name": "characterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "current"
+              ],
+              "default": "current"
+            },
+            "description": "Only current is supported initially. Explicit IDs are reserved for future past-season browsing."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response; null and empty are valid data states.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Public shared-cache lifetime at most 1800 seconds, capped by remaining data freshness and weekly/season boundary; browser max-age=0. No stale reuse beyond the bound."
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentScore"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified; no response body.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid season selector",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unknown tracked character",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Nonnegative delay in seconds or HTTP date.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Unavailable season configuration or stored data",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        },
+        "description": "Fetch the current score through the backend; may reuse a successful result for at most 30 minutes. Does not write weekly history. weeklyChange is current score minus last completed displayed weekly score. Shared by roster and character detail. Independent character failures must not fail the entire roster. Cache reuse age is measured from fetchedAt, never restarted when navigating."
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Realm": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "slug",
+          "name"
+        ]
+      },
+      "Season": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "region": {
+            "type": "string",
+            "const": "us"
+          },
+          "startsAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "Z$"
+          },
+          "endsAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "Z$"
+          },
+          "endDateEstimated": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "region",
+          "startsAt",
+          "endsAt",
+          "endDateEstimated"
+        ]
+      },
+      "Character": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "classKey": {
+            "type": "string",
+            "enum": [
+              "death-knight",
+              "demon-hunter",
+              "druid",
+              "evoker",
+              "hunter",
+              "mage",
+              "monk",
+              "paladin",
+              "priest",
+              "rogue",
+              "shaman",
+              "warlock",
+              "warrior"
+            ]
+          },
+          "realm": {
+            "$ref": "#/components/schemas/Realm"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "classKey",
+          "realm"
+        ]
+      },
+      "Summary": {
+        "type": "object",
+        "properties": {
+          "latestScore": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "weeklyChange": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "lastObservedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "Z$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "latestScore",
+          "weeklyChange",
+          "lastObservedAt"
+        ]
+      },
+      "RosterCharacter": {
+        "$ref": "#/components/schemas/Character"
+      },
+      "Week": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "index": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "startsAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "Z$"
+              },
+              "endsAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "Z$"
+              },
+              "isProvisional": {
+                "type": "boolean"
+              },
+              "status": {
+                "const": "observed",
+                "type": "string"
+              },
+              "score": {
+                "type": "number",
+                "minimum": 0
+              },
+              "sourceObservedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "Z$"
+              }
+            },
+            "required": [
+              "index",
+              "startsAt",
+              "endsAt",
+              "isProvisional",
+              "status",
+              "score",
+              "sourceObservedAt"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "index": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "startsAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "Z$"
+              },
+              "endsAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "Z$"
+              },
+              "isProvisional": {
+                "type": "boolean"
+              },
+              "status": {
+                "const": "carriedForward",
+                "type": "string"
+              },
+              "score": {
+                "type": "number",
+                "minimum": 0
+              },
+              "sourceObservedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "Z$"
+              }
+            },
+            "required": [
+              "index",
+              "startsAt",
+              "endsAt",
+              "isProvisional",
+              "status",
+              "score",
+              "sourceObservedAt"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "index": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "startsAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "Z$"
+              },
+              "endsAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "Z$"
+              },
+              "isProvisional": {
+                "type": "boolean"
+              },
+              "status": {
+                "const": "unobserved",
+                "type": "string"
+              },
+              "score": {
+                "type": "null"
+              },
+              "sourceObservedAt": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "index",
+              "startsAt",
+              "endsAt",
+              "isProvisional",
+              "status",
+              "score",
+              "sourceObservedAt"
+            ]
+          }
+        ]
+      },
+      "Roster": {
+        "type": "object",
+        "properties": {
+          "dataMode": {
+            "type": "string",
+            "enum": [
+              "mock",
+              "live"
+            ]
+          },
+          "season": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Season"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "characters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RosterCharacter"
+            }
+          }
+        },
+        "required": [
+          "dataMode",
+          "season",
+          "characters"
+        ]
+      },
+      "History": {
+        "type": "object",
+        "properties": {
+          "dataMode": {
+            "type": "string",
+            "enum": [
+              "mock",
+              "live"
+            ]
+          },
+          "season": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Season"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "character": {
+            "$ref": "#/components/schemas/Character"
+          },
+          "weeks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Week"
+            }
+          },
+          "weeklySummary": {
+            "type": "object",
+            "properties": {
+              "latestScore": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0
+              },
+              "weeklyChange": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "lastObservedAt": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "Z$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "latestScore",
+              "weeklyChange",
+              "lastObservedAt"
+            ]
+          }
+        },
+        "required": [
+          "dataMode",
+          "season",
+          "character",
+          "weeks",
+          "weeklySummary"
+        ]
+      },
+      "Problem": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "format": "uri-reference"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "integer",
+            "minimum": 400,
+            "maximum": 599
+          },
+          "code": {
+            "type": "string",
+            "enum": [
+              "character_not_found",
+              "invalid_season_selector",
+              "season_unavailable",
+              "data_unavailable",
+              "unexpected_error",
+              "rate_limited"
+            ]
+          },
+          "traceId": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "type",
+          "title",
+          "status",
+          "code",
+          "traceId"
+        ]
+      },
+      "Health": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ok"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "CurrentScore": {
+        "type": "object",
+        "properties": {
+          "dataMode": {
+            "enum": [
+              "mock",
+              "live"
+            ],
+            "type": "string"
+          },
+          "characterId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "season": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Season"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "score": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "fetchedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "Z$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "weeklyChange": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "baselineScore": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "baselineWeekIndex": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1
+          }
+        },
+        "required": [
+          "dataMode",
+          "characterId",
+          "season",
+          "score",
+          "fetchedAt",
+          "weeklyChange",
+          "baselineScore",
+          "baselineWeekIndex"
+        ]
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "WoW"
+    }
+  ]
+}

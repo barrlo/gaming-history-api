@@ -1,0 +1,122 @@
+[
+  {
+    "characterId": "char-aeloria",
+    "seasonId": "demo-season",
+    "score": 820,
+    "observedAt": "2026-07-28T11:00:00Z"
+  },
+  {
+    "characterId": "char-aeloria",
+    "seasonId": "demo-season",
+    "score": 1320,
+    "observedAt": "2026-08-04T11:00:00Z"
+  },
+  {
+    "characterId": "char-aeloria",
+    "seasonId": "demo-season",
+    "score": 1650,
+    "observedAt": "2026-08-11T11:00:00Z"
+  },
+  {
+    "characterId": "char-aeloria",
+    "seasonId": "demo-season",
+    "score": 1920,
+    "observedAt": "2026-08-18T11:00:00Z"
+  },
+  {
+    "characterId": "char-aeloria",
+    "seasonId": "demo-season",
+    "score": 2260,
+    "observedAt": "2026-09-01T11:00:00Z"
+  },
+  {
+    "characterId": "char-aeloria",
+    "seasonId": "demo-season",
+    "score": 2362,
+    "observedAt": "2026-09-08T11:00:00Z"
+  },
+  {
+    "characterId": "char-aeloria",
+    "seasonId": "demo-season",
+    "score": 2486,
+    "observedAt": "2026-09-15T11:00:00Z"
+  },
+  {
+    "characterId": "char-thalren",
+    "seasonId": "demo-season",
+    "score": 0,
+    "observedAt": "2026-07-28T11:00:00Z"
+  },
+  {
+    "characterId": "char-thalren",
+    "seasonId": "demo-season",
+    "score": 450,
+    "observedAt": "2026-08-04T11:00:00Z"
+  },
+  {
+    "characterId": "char-thalren",
+    "seasonId": "demo-season",
+    "score": 920,
+    "observedAt": "2026-08-11T11:00:00Z"
+  },
+  {
+    "characterId": "char-thalren",
+    "seasonId": "demo-season",
+    "score": 1200,
+    "observedAt": "2026-08-18T11:00:00Z"
+  },
+  {
+    "characterId": "char-thalren",
+    "seasonId": "demo-season",
+    "score": 1700,
+    "observedAt": "2026-08-25T11:00:00Z"
+  },
+  {
+    "characterId": "char-thalren",
+    "seasonId": "demo-season",
+    "score": 1950,
+    "observedAt": "2026-09-01T11:00:00Z"
+  },
+  {
+    "characterId": "char-thalren",
+    "seasonId": "demo-season",
+    "score": 2026,
+    "observedAt": "2026-09-08T11:00:00Z"
+  },
+  {
+    "characterId": "char-thalren",
+    "seasonId": "demo-season",
+    "score": 2112,
+    "observedAt": "2026-09-15T11:00:00Z"
+  },
+  {
+    "characterId": "char-vaelis",
+    "seasonId": "demo-season",
+    "score": 600,
+    "observedAt": "2026-08-11T11:00:00Z"
+  },
+  {
+    "characterId": "char-vaelis",
+    "seasonId": "demo-season",
+    "score": 900,
+    "observedAt": "2026-08-18T11:00:00Z"
+  },
+  {
+    "characterId": "char-vaelis",
+    "seasonId": "demo-season",
+    "score": 1400,
+    "observedAt": "2026-08-25T11:00:00Z"
+  },
+  {
+    "characterId": "char-vaelis",
+    "seasonId": "demo-season",
+    "score": 1600,
+    "observedAt": "2026-09-01T11:00:00Z"
+  },
+  {
+    "characterId": "char-vaelis",
+    "seasonId": "demo-season",
+    "score": 1764,
+    "observedAt": "2026-09-08T11:00:00Z"
+  }
+]

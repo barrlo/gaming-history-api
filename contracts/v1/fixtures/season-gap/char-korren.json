@@ -1,0 +1,19 @@
+{
+  "dataMode": "mock",
+  "season": null,
+  "character": {
+    "id": "char-korren",
+    "name": "Korren",
+    "classKey": "warrior",
+    "realm": {
+      "slug": "sargeras",
+      "name": "Sargeras"
+    }
+  },
+  "weeks": [],
+  "weeklySummary": {
+    "latestScore": null,
+    "weeklyChange": null,
+    "lastObservedAt": null
+  }
+}

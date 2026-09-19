@@ -1,0 +1,42 @@
+{
+  "dataMode": "mock",
+  "season": null,
+  "characters": [
+    {
+      "id": "char-aeloria",
+      "name": "Aeloria",
+      "classKey": "paladin",
+      "realm": {
+        "slug": "stormrage",
+        "name": "Stormrage"
+      }
+    },
+    {
+      "id": "char-korren",
+      "name": "Korren",
+      "classKey": "warrior",
+      "realm": {
+        "slug": "sargeras",
+        "name": "Sargeras"
+      }
+    },
+    {
+      "id": "char-thalren",
+      "name": "Thalren",
+      "classKey": "mage",
+      "realm": {
+        "slug": "stormrage",
+        "name": "Stormrage"
+      }
+    },
+    {
+      "id": "char-vaelis",
+      "name": "Vaelis",
+      "classKey": "druid",
+      "realm": {
+        "slug": "sargeras",
+        "name": "Sargeras"
+      }
+    }
+  ]
+}

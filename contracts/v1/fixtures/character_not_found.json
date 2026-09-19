@@ -1,0 +1,7 @@
+{
+  "type": "about:blank",
+  "title": "Not Found",
+  "status": 404,
+  "code": "character_not_found",
+  "traceId": "fixture-trace-character_not_found"
+}
