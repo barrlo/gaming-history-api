@@ -34,8 +34,18 @@ Season metadata in all mock responses now comes from `SeasonCalendar`, evaluated
 
 The calendar also provides Tuesday 15:00 UTC weekly boundaries and clips partial weeks to season dates. Weekly-history projection still replays fixtures; it will consume these calendar rules in the next checkpoint. No automatic page refresh or new response fields are introduced.
 
-Only WoW read endpoints and health are implemented. The 0.4.0-review Swagger contract also describes planned PoE/PoE2 operations; those routes are not implemented yet. Their twenty standalone examples and schema index live in `contracts/v1/fixtures/poe-expansion/`, separately from the existing WoW mock scenarios. No Blizzard credentials, external requests, cloud resources, login, database or collector are used. HTTP tests cover fixture responses, selector/character error precedence, per-character failures, conditional responses and Swagger delivery. They do not claim production projection or caching is implemented. No CORS policy is needed for the UI's same-origin Vite proxy.
+WoW read endpoints, PoE/PoE2 roster endpoints and health are implemented. The 0.4.0-review Swagger contract also describes planned PoE/PoE2 build, snapshot and refresh operations; those routes are not implemented yet. Their twenty standalone examples and schema index live in `contracts/v1/fixtures/poe-expansion/`, separately from the existing WoW mock scenarios. No Blizzard credentials, external requests, cloud resources, login, database or collector are used. HTTP tests cover fixture responses, selector/character error precedence, per-character failures, conditional responses and Swagger delivery. They do not claim production projection or caching is implemented. No CORS policy is needed for the UI's same-origin Vite proxy.
 
 ## Scaffold verification (2026-09-18)
 
 On .NET SDK 10.0.401: locked restore passed, Release build passed with zero warnings/errors, all 13 xUnit HTTP cases passed, and `dotnet format --verify-no-changes --no-restore` passed. The six scenario cases compare roster and all character responses to canonical fixtures. Swagger asset/spec delivery and error precedence are exercised through WebApplicationFactory. Cloud, persistence, production cache and collector behavior are not covered because they are not implemented.
+
+## PoE and PoE2 stored roster mocks
+
+`GET /api/v1/poe/characters` and `GET /api/v1/poe2/characters` replay game-specific stored examples from `src/GamingHistory.Api/MockFixtures`, without fetching upstream. Responses preserve their observation timestamps. League families sort by start date descending (unknown last), then family ID; characters sort by level descending, case-insensitive name, character ID and league ID. Empty groups are omitted. Variant metadata, characters without an ascendancy, unavailable builds and archived participation remain intact. Discovery, permanent-league filtering and archival transitions belong to the future collector; these endpoints only read its stored results.
+
+The populated example includes multiple league families, a temporary Hardcore variant, archived characters, missing builds and both ascended and unascended characters. Contract examples remain unchanged.
+
+Configure games independently with `Mock__PoeScenario` or `Mock__Poe2Scenario`: `populated` (default), `empty`, `archived` or `unavailable`. The archived scenario retains the original temporary league and applies the approved archived example's tracking state. Unavailable simulates a storage failure and returns 503 Problem Details with `unexpected_error`; it never returns an empty success. Unknown scenario values fail initialization.
+
+Successful PoE roster responses use the contract's `Cache-Control: no-cache`; problems use `no-store`. These mocks do not implement production storage, scheduling, cache freshness or provider integration. They do not add conditional ETags or claim build routes are already available.

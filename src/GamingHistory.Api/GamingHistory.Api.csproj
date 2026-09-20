@@ -2,4 +2,5 @@
   <PropertyGroup><TargetFramework>net10.0</TargetFramework></PropertyGroup>
   <ItemGroup><PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.2.3" /></ItemGroup>
   <ItemGroup><Content Include="../../contracts/v1/**/*" Link="contracts/v1/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" /></ItemGroup>
+  <ItemGroup><Content Update="MockFixtures/**/*.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" /></ItemGroup>
 </Project>

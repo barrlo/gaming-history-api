@@ -1,0 +1,161 @@
+{
+  "game": "poe",
+  "groups": [
+    {
+      "id": "unknown-family",
+      "name": "Uncharted",
+      "startAt": null,
+      "characters": [
+        {
+          "character": {
+            "id": "1111111111111111111111111111111111111111111111111111111111111111",
+            "name": "FirstSteps",
+            "class": "Witch",
+            "ascendancy": {
+              "status": "none",
+              "name": null
+            },
+            "level": 8
+          },
+          "league": {
+            "id": "demo-unknown",
+            "name": "Uncharted",
+            "startAt": null,
+            "endAt": null,
+            "rules": []
+          },
+          "tracking": {
+            "status": "archived",
+            "reason": "missing",
+            "firstSeenAt": "2026-09-18T21:00:00Z"
+          },
+          "observedAt": "2026-09-20T08:00:00Z",
+          "buildAvailable": false
+        }
+      ]
+    },
+    {
+      "id": "tidefall-family",
+      "name": "Tidefall",
+      "startAt": "2026-05-01T19:00:00Z",
+      "characters": [
+        {
+          "character": {
+            "id": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+            "name": "OldFlame",
+            "class": "Witch",
+            "ascendancy": {
+              "status": "known",
+              "name": "Elementalist"
+            },
+            "level": 96
+          },
+          "league": {
+            "id": "demo-tidefall",
+            "name": "Tidefall",
+            "startAt": "2026-05-01T19:00:00Z",
+            "endAt": "2026-08-28T19:00:00Z",
+            "rules": []
+          },
+          "tracking": {
+            "status": "archived",
+            "reason": "leagueEnded",
+            "firstSeenAt": "2026-05-01T21:00:00Z"
+          },
+          "observedAt": "2026-08-28T08:00:00Z",
+          "buildAvailable": true
+        }
+      ]
+    },
+    {
+      "id": "demo-family",
+      "name": "Emberfall",
+      "startAt": "2026-09-04T19:00:00Z",
+      "characters": [
+        {
+          "character": {
+            "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "name": "Ashwarden",
+            "class": "Witch",
+            "ascendancy": {
+              "status": "none",
+              "name": null
+            },
+            "level": 18
+          },
+          "league": {
+            "id": "demo-emberfall",
+            "name": "Emberfall",
+            "startAt": "2026-09-04T19:00:00Z",
+            "endAt": null,
+            "rules": []
+          },
+          "tracking": {
+            "status": "active",
+            "reason": null,
+            "firstSeenAt": "2026-09-18T21:00:00Z"
+          },
+          "observedAt": "2026-09-20T08:00:00Z",
+          "buildAvailable": true
+        },
+        {
+          "character": {
+            "id": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "name": "IronAsh",
+            "class": "Witch",
+            "ascendancy": {
+              "status": "known",
+              "name": "Occultist"
+            },
+            "level": 75
+          },
+          "league": {
+            "id": "demo-emberfall-hc",
+            "name": "Hardcore Emberfall",
+            "startAt": "2026-09-04T19:00:00Z",
+            "endAt": null,
+            "rules": [
+              {
+                "id": "hardcore",
+                "name": "Hardcore"
+              }
+            ]
+          },
+          "tracking": {
+            "status": "active",
+            "reason": null,
+            "firstSeenAt": "2026-09-18T21:00:00Z"
+          },
+          "observedAt": "2026-09-20T08:00:00Z",
+          "buildAvailable": true
+        },
+        {
+          "character": {
+            "id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "name": "Emberwitch",
+            "class": "Witch",
+            "ascendancy": {
+              "status": "known",
+              "name": "Necromancer"
+            },
+            "level": 93
+          },
+          "league": {
+            "id": "demo-emberfall",
+            "name": "Emberfall",
+            "startAt": "2026-09-04T19:00:00Z",
+            "endAt": null,
+            "rules": []
+          },
+          "tracking": {
+            "status": "active",
+            "reason": null,
+            "firstSeenAt": "2026-09-18T21:00:00Z"
+          },
+          "observedAt": "2026-09-20T08:00:00Z",
+          "buildAvailable": true
+        }
+      ]
+    }
+  ]
+}
