@@ -21,7 +21,7 @@ app.Use(async (context, next) =>
 app.UseSwaggerUI(options =>
 {
     options.RoutePrefix = "api/docs";
-    options.SwaggerEndpoint("/api/openapi/v1.json", "Gaming History API 0.3.0-review");
+    options.SwaggerEndpoint("/api/openapi/v1.json", "Gaming History API 0.4.0-review");
     options.DocumentTitle = "Gaming History API — mock development";
 });
 
