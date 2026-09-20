@@ -34,7 +34,7 @@ Season metadata in all mock responses now comes from `SeasonCalendar`, evaluated
 
 The calendar also provides Tuesday 15:00 UTC weekly boundaries and clips partial weeks to season dates. Weekly-history projection still replays fixtures; it will consume these calendar rules in the next checkpoint. No automatic page refresh or new response fields are introduced.
 
-Only read endpoints exist. No Blizzard credentials, external requests, cloud resources, login, database or collector are used. HTTP tests cover fixture responses, selector/character error precedence, per-character failures, conditional responses and Swagger delivery. They do not claim production projection or caching is implemented. No CORS policy is needed for the UI's same-origin Vite proxy.
+Only WoW read endpoints and health are implemented. The 0.4.0-review Swagger contract also describes planned PoE/PoE2 operations; those routes are not implemented yet. Their twenty standalone examples and schema index live in `contracts/v1/fixtures/poe-expansion/`, separately from the existing WoW mock scenarios. No Blizzard credentials, external requests, cloud resources, login, database or collector are used. HTTP tests cover fixture responses, selector/character error precedence, per-character failures, conditional responses and Swagger delivery. They do not claim production projection or caching is implemented. No CORS policy is needed for the UI's same-origin Vite proxy.
 
 ## Scaffold verification (2026-09-18)
 

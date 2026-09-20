@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Gaming History API",
-    "version": "0.3.0-review",
-    "description": "Public read-only contract candidate. UTC dates; unknown optional fields are ignored."
+    "version": "0.4.0-review",
+    "description": "Additive PoE/PoE2 review candidate. Includes asynchronous public refresh. Storage independent; fictional examples. Not yet approved for implementation."
   },
   "servers": [
     {
@@ -539,6 +539,2830 @@
         },
         "description": "Fetch the current score through the backend; may reuse a successful result for at most 30 minutes. Does not write weekly history. weeklyChange is current score minus last completed displayed weekly score. Shared by roster and character detail. Independent character failures must not fail the entire roster. Cache reuse age is measured from fetchedAt, never restarted when navigating."
       }
+    },
+    "/api/v1/poe/characters": {
+      "get": {
+        "operationId": "listPoeCharacters",
+        "tags": [
+          "Poe"
+        ],
+        "description": "Stored roster; never fetch upstream.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-cache"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeRoster"
+                },
+                "example": {
+                  "game": "poe",
+                  "groups": [
+                    {
+                      "id": "demo-family",
+                      "name": "Emberfall",
+                      "startAt": "2026-09-04T19:00:00Z",
+                      "characters": [
+                        {
+                          "character": {
+                            "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                            "name": "Ashwarden",
+                            "class": "Witch",
+                            "ascendancy": {
+                              "status": "none",
+                              "name": null
+                            },
+                            "level": 18
+                          },
+                          "league": {
+                            "id": "demo-emberfall",
+                            "name": "Emberfall",
+                            "startAt": "2026-09-04T19:00:00Z",
+                            "endAt": null,
+                            "rules": []
+                          },
+                          "tracking": {
+                            "status": "active",
+                            "reason": null,
+                            "firstSeenAt": "2026-09-18T21:00:00Z"
+                          },
+                          "observedAt": "2026-09-20T08:00:00Z",
+                          "buildAvailable": true
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Delay in whole seconds when retryable; absent for archived/ineligible.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/poe/characters/{characterId}/build": {
+      "get": {
+        "operationId": "getPoeLatestBuild",
+        "tags": [
+          "Poe"
+        ],
+        "description": "Most recent eligible stored build for this character, including archived retained data; permanent-league migration never replaces it. Includes mutable refresh state. Missing first build returns 503 build_unavailable; roster may still show discovered identity.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "characterId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeLatest"
+                },
+                "examples": {
+                  "latest": {
+                    "value": {
+                      "build": {
+                        "game": "poe",
+                        "character": {
+                          "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                          "name": "Ashwarden",
+                          "class": "Witch",
+                          "ascendancy": {
+                            "status": "none",
+                            "name": null
+                          },
+                          "level": 18
+                        },
+                        "league": {
+                          "id": "demo-emberfall",
+                          "name": "Emberfall",
+                          "startAt": "2026-09-04T19:00:00Z",
+                          "endAt": null,
+                          "rules": []
+                        },
+                        "observedAt": "2026-09-20T08:00:00Z",
+                        "definitionVersion": null,
+                        "equipment": {
+                          "availability": "available",
+                          "entries": [
+                            {
+                              "name": "Ember Ward",
+                              "typeLine": "Example Robe",
+                              "baseType": "Example Robe",
+                              "identified": true,
+                              "ilvl": 18,
+                              "frameTypeId": "rare",
+                              "inventoryId": "BodyArmour",
+                              "properties": [
+                                {
+                                  "name": "Energy Shield",
+                                  "values": [
+                                    [
+                                      "42",
+                                      0
+                                    ]
+                                  ],
+                                  "displayMode": 0
+                                }
+                              ],
+                              "explicitMods": [
+                                {
+                                  "description": "+20 to maximum Life"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "skills": {
+                          "availability": "available",
+                          "entries": [
+                            {
+                              "id": "group-1",
+                              "skills": [
+                                {
+                                  "name": "Example Skill",
+                                  "level": 3,
+                                  "quality": 0
+                                }
+                              ],
+                              "supports": [
+                                {
+                                  "name": "Example Support",
+                                  "level": 3,
+                                  "quality": 0
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "ascendancySkills": {
+                          "availability": "notApplicable",
+                          "entries": []
+                        },
+                        "passiveSkills": {
+                          "availability": "unavailable",
+                          "entries": []
+                        }
+                      },
+                      "tracking": {
+                        "status": "active",
+                        "reason": null,
+                        "firstSeenAt": "2026-09-18T21:00:00Z"
+                      },
+                      "refresh": {
+                        "status": "available",
+                        "nextAllowedAt": null,
+                        "operationId": null
+                      }
+                    }
+                  },
+                  "archived": {
+                    "value": {
+                      "build": {
+                        "game": "poe",
+                        "character": {
+                          "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                          "name": "Ashwarden",
+                          "class": "Witch",
+                          "ascendancy": {
+                            "status": "none",
+                            "name": null
+                          },
+                          "level": 18
+                        },
+                        "league": {
+                          "id": "demo-emberfall",
+                          "name": "Emberfall",
+                          "startAt": "2026-09-04T19:00:00Z",
+                          "endAt": null,
+                          "rules": []
+                        },
+                        "observedAt": "2026-09-20T08:00:00Z",
+                        "definitionVersion": null,
+                        "equipment": {
+                          "availability": "available",
+                          "entries": [
+                            {
+                              "name": "Ember Ward",
+                              "typeLine": "Example Robe",
+                              "baseType": "Example Robe",
+                              "identified": true,
+                              "ilvl": 18,
+                              "frameTypeId": "rare",
+                              "inventoryId": "BodyArmour",
+                              "properties": [
+                                {
+                                  "name": "Energy Shield",
+                                  "values": [
+                                    [
+                                      "42",
+                                      0
+                                    ]
+                                  ],
+                                  "displayMode": 0
+                                }
+                              ],
+                              "explicitMods": [
+                                {
+                                  "description": "+20 to maximum Life"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "skills": {
+                          "availability": "available",
+                          "entries": [
+                            {
+                              "id": "group-1",
+                              "skills": [
+                                {
+                                  "name": "Example Skill",
+                                  "level": 3,
+                                  "quality": 0
+                                }
+                              ],
+                              "supports": [
+                                {
+                                  "name": "Example Support",
+                                  "level": 3,
+                                  "quality": 0
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "ascendancySkills": {
+                          "availability": "notApplicable",
+                          "entries": []
+                        },
+                        "passiveSkills": {
+                          "availability": "unavailable",
+                          "entries": []
+                        }
+                      },
+                      "tracking": {
+                        "status": "archived",
+                        "reason": "permanentMigration",
+                        "firstSeenAt": "2026-09-18T21:00:00Z"
+                      },
+                      "refresh": {
+                        "status": "archived",
+                        "nextAllowedAt": null,
+                        "operationId": null
+                      }
+                    }
+                  },
+                  "partial": {
+                    "value": {
+                      "build": {
+                        "game": "poe",
+                        "character": {
+                          "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                          "name": "Ashwarden",
+                          "class": "Witch",
+                          "ascendancy": {
+                            "status": "none",
+                            "name": null
+                          },
+                          "level": 18
+                        },
+                        "league": {
+                          "id": "demo-emberfall",
+                          "name": "Emberfall",
+                          "startAt": "2026-09-04T19:00:00Z",
+                          "endAt": null,
+                          "rules": []
+                        },
+                        "observedAt": "2026-09-20T08:00:00Z",
+                        "definitionVersion": null,
+                        "equipment": {
+                          "availability": "available",
+                          "entries": [
+                            {
+                              "name": "Ember Ward",
+                              "typeLine": "Example Robe",
+                              "baseType": "Example Robe",
+                              "identified": true,
+                              "ilvl": 18,
+                              "frameTypeId": "rare",
+                              "inventoryId": "BodyArmour",
+                              "properties": [
+                                {
+                                  "name": "Energy Shield",
+                                  "values": [
+                                    [
+                                      "42",
+                                      0
+                                    ]
+                                  ],
+                                  "displayMode": 0
+                                }
+                              ],
+                              "explicitMods": [
+                                {
+                                  "description": "+20 to maximum Life"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "skills": {
+                          "availability": "partial",
+                          "entries": [
+                            {
+                              "id": "group-1",
+                              "skills": [
+                                {
+                                  "name": "Example Skill",
+                                  "level": 3,
+                                  "quality": null
+                                }
+                              ],
+                              "supports": [
+                                {
+                                  "name": "Example Support",
+                                  "level": 3,
+                                  "quality": 0
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "ascendancySkills": {
+                          "availability": "notApplicable",
+                          "entries": []
+                        },
+                        "passiveSkills": {
+                          "availability": "unavailable",
+                          "entries": []
+                        }
+                      },
+                      "tracking": {
+                        "status": "active",
+                        "reason": null,
+                        "firstSeenAt": "2026-09-18T21:00:00Z"
+                      },
+                      "refresh": {
+                        "status": "available",
+                        "nextAllowedAt": null,
+                        "operationId": null
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Delay in whole seconds when retryable; absent for archived/ineligible.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/poe/characters/{characterId}/snapshots": {
+      "get": {
+        "operationId": "listPoeSnapshots",
+        "tags": [
+          "Poe"
+        ],
+        "description": "Saved history summaries across this character\u2019s tracked leagues. Each summary retains league metadata.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "characterId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 30
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-cache"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeSnapshots"
+                },
+                "examples": {
+                  "populated": {
+                    "value": {
+                      "snapshots": [
+                        {
+                          "id": "demo-snapshot",
+                          "league": {
+                            "id": "demo-emberfall",
+                            "name": "Emberfall",
+                            "startAt": "2026-09-04T19:00:00Z",
+                            "endAt": null,
+                            "rules": []
+                          },
+                          "scheduledAt": "2026-09-20T08:00:00Z",
+                          "historyDate": "2026-09-20",
+                          "observedAt": "2026-09-20T08:00:00Z",
+                          "level": 18
+                        }
+                      ],
+                      "nextCursor": null
+                    }
+                  },
+                  "empty": {
+                    "value": {
+                      "snapshots": [],
+                      "nextCursor": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Delay in whole seconds when retryable; absent for archived/ineligible.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/poe/characters/{characterId}/snapshots/{snapshotId}": {
+      "get": {
+        "operationId": "getPoeSnapshot",
+        "tags": [
+          "Poe"
+        ],
+        "description": "Immutable saved build; no mutable cooldown metadata.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "characterId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "in": "path",
+            "name": "snapshotId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-cache"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeSnapshot"
+                },
+                "example": {
+                  "snapshot": {
+                    "id": "demo-snapshot",
+                    "league": {
+                      "id": "demo-emberfall",
+                      "name": "Emberfall",
+                      "startAt": "2026-09-04T19:00:00Z",
+                      "endAt": null,
+                      "rules": []
+                    },
+                    "scheduledAt": "2026-09-20T08:00:00Z",
+                    "historyDate": "2026-09-20",
+                    "observedAt": "2026-09-20T08:00:00Z",
+                    "level": 18
+                  },
+                  "build": {
+                    "game": "poe",
+                    "character": {
+                      "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "name": "Ashwarden",
+                      "class": "Witch",
+                      "ascendancy": {
+                        "status": "none",
+                        "name": null
+                      },
+                      "level": 18
+                    },
+                    "league": {
+                      "id": "demo-emberfall",
+                      "name": "Emberfall",
+                      "startAt": "2026-09-04T19:00:00Z",
+                      "endAt": null,
+                      "rules": []
+                    },
+                    "observedAt": "2026-09-20T08:00:00Z",
+                    "definitionVersion": null,
+                    "equipment": {
+                      "availability": "available",
+                      "entries": [
+                        {
+                          "name": "Ember Ward",
+                          "typeLine": "Example Robe",
+                          "baseType": "Example Robe",
+                          "identified": true,
+                          "ilvl": 18,
+                          "frameTypeId": "rare",
+                          "inventoryId": "BodyArmour",
+                          "properties": [
+                            {
+                              "name": "Energy Shield",
+                              "values": [
+                                [
+                                  "42",
+                                  0
+                                ]
+                              ],
+                              "displayMode": 0
+                            }
+                          ],
+                          "explicitMods": [
+                            {
+                              "description": "+20 to maximum Life"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "skills": {
+                      "availability": "available",
+                      "entries": [
+                        {
+                          "id": "group-1",
+                          "skills": [
+                            {
+                              "name": "Example Skill",
+                              "level": 3,
+                              "quality": 0
+                            }
+                          ],
+                          "supports": [
+                            {
+                              "name": "Example Support",
+                              "level": 3,
+                              "quality": 0
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "ascendancySkills": {
+                      "availability": "notApplicable",
+                      "entries": []
+                    },
+                    "passiveSkills": {
+                      "availability": "unavailable",
+                      "entries": []
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Delay in whole seconds when retryable; absent for archived/ineligible.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/poe/characters/{characterId}/refresh": {
+      "post": {
+        "operationId": "refreshPoeCharacter",
+        "tags": [
+          "Poe"
+        ],
+        "description": "Admit asynchronous refresh for this character\u2019s current eligible participation, resolved by the server. Recheck eligibility before commit; never import a permanent-league build into retained history. Atomically reserve five-minute cooldown. No historical write. Current manual operation returns 409 refresh_in_progress with operationId; scheduled lease also returns 409 without a public operationId. Cooldown returns 429 with nextAllowedAt and Retry-After. Ineligible participation returns 409 refresh_not_allowed. Rejected requests do not extend cooldown. Worker performs one bounded attempt; terminal failure remains failed until a newly admitted manual request. Scheduled retry policy remains separate.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "characterId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Success",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Location": {
+                "description": "Relative operation-status URL.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Suggested polling delay in whole seconds; present only while pending/running.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeRefreshOperation"
+                },
+                "example": {
+                  "id": "demo-operation",
+                  "characterId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "leagueId": "demo-emberfall",
+                  "status": "pending",
+                  "acceptedAt": "2026-09-20T14:00:00Z",
+                  "completedAt": null,
+                  "nextAllowedAt": "2026-09-20T14:05:00Z",
+                  "error": null
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Delay in whole seconds when retryable; absent for archived/ineligible.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                },
+                "example": {
+                  "type": "about:blank",
+                  "title": "Refresh cooldown active",
+                  "status": 429,
+                  "code": "cooldown_active",
+                  "traceId": "example-trace",
+                  "nextAllowedAt": "2026-09-20T14:05:00Z"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Delay in whole seconds when retryable; absent for archived/ineligible.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                },
+                "examples": {
+                  "inProgress": {
+                    "value": {
+                      "type": "about:blank",
+                      "title": "Refresh already running",
+                      "status": 409,
+                      "code": "refresh_in_progress",
+                      "traceId": "example-trace",
+                      "operationId": "demo-operation"
+                    }
+                  },
+                  "archived": {
+                    "value": {
+                      "type": "about:blank",
+                      "title": "Archived character cannot refresh",
+                      "status": 409,
+                      "code": "refresh_not_allowed",
+                      "traceId": "example-trace"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/poe/refresh-operations/{operationId}": {
+      "get": {
+        "operationId": "getPoeRefreshOperation",
+        "tags": [
+          "Poe"
+        ],
+        "description": "Poll only while pending/running, using Retry-After; stop on completion. Operation lookup is game scoped.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "operationId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Suggested polling delay in whole seconds; present only while pending/running.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeRefreshOperation"
+                },
+                "examples": {
+                  "pending": {
+                    "value": {
+                      "id": "demo-operation",
+                      "characterId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "leagueId": "demo-emberfall",
+                      "status": "pending",
+                      "acceptedAt": "2026-09-20T14:00:00Z",
+                      "completedAt": null,
+                      "nextAllowedAt": "2026-09-20T14:05:00Z",
+                      "error": null
+                    }
+                  },
+                  "succeeded": {
+                    "value": {
+                      "id": "demo-operation",
+                      "characterId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "leagueId": "demo-emberfall",
+                      "status": "succeeded",
+                      "acceptedAt": "2026-09-20T14:00:00Z",
+                      "completedAt": "2026-09-20T14:00:04Z",
+                      "nextAllowedAt": "2026-09-20T14:05:00Z",
+                      "error": null
+                    }
+                  },
+                  "failed": {
+                    "value": {
+                      "id": "demo-operation",
+                      "characterId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "leagueId": "demo-emberfall",
+                      "status": "failed",
+                      "acceptedAt": "2026-09-20T14:00:00Z",
+                      "completedAt": "2026-09-20T14:00:04Z",
+                      "nextAllowedAt": "2026-09-20T14:05:00Z",
+                      "error": {
+                        "type": "about:blank",
+                        "title": "Provider unavailable",
+                        "status": 503,
+                        "code": "provider_unavailable",
+                        "traceId": "example-trace"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Delay in whole seconds when retryable; absent for archived/ineligible.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/poe2/characters": {
+      "get": {
+        "operationId": "listPoe2Characters",
+        "tags": [
+          "Poe2"
+        ],
+        "description": "Stored roster; never fetch upstream.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-cache"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeRoster"
+                },
+                "example": {
+                  "game": "poe2",
+                  "groups": [
+                    {
+                      "id": "demo-family",
+                      "name": "Emberfall",
+                      "startAt": "2026-09-04T19:00:00Z",
+                      "characters": [
+                        {
+                          "character": {
+                            "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                            "name": "Ashwarden",
+                            "class": "Witch",
+                            "ascendancy": {
+                              "status": "none",
+                              "name": null
+                            },
+                            "level": 18
+                          },
+                          "league": {
+                            "id": "demo-emberfall",
+                            "name": "Emberfall",
+                            "startAt": "2026-09-04T19:00:00Z",
+                            "endAt": null,
+                            "rules": []
+                          },
+                          "tracking": {
+                            "status": "active",
+                            "reason": null,
+                            "firstSeenAt": "2026-09-18T21:00:00Z"
+                          },
+                          "observedAt": "2026-09-20T08:00:00Z",
+                          "buildAvailable": true
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Delay in whole seconds when retryable; absent for archived/ineligible.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/poe2/characters/{characterId}/build": {
+      "get": {
+        "operationId": "getPoe2LatestBuild",
+        "tags": [
+          "Poe2"
+        ],
+        "description": "Most recent eligible stored build for this character, including archived retained data; permanent-league migration never replaces it. Includes mutable refresh state. Missing first build returns 503 build_unavailable; roster may still show discovered identity.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "characterId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Poe2Latest"
+                },
+                "examples": {
+                  "latest": {
+                    "value": {
+                      "build": {
+                        "game": "poe2",
+                        "character": {
+                          "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                          "name": "Ashwarden",
+                          "class": "Witch",
+                          "ascendancy": {
+                            "status": "none",
+                            "name": null
+                          },
+                          "level": 18
+                        },
+                        "league": {
+                          "id": "demo-emberfall",
+                          "name": "Emberfall",
+                          "startAt": "2026-09-04T19:00:00Z",
+                          "endAt": null,
+                          "rules": []
+                        },
+                        "observedAt": "2026-09-20T08:00:00Z",
+                        "definitionVersion": null,
+                        "equipment": {
+                          "availability": "available",
+                          "entries": [
+                            {
+                              "name": "Ember Ward",
+                              "typeLine": "Example Robe",
+                              "baseType": "Example Robe",
+                              "identified": true,
+                              "ilvl": 18,
+                              "frameTypeId": "rare",
+                              "inventoryId": "BodyArmour",
+                              "properties": [
+                                {
+                                  "name": "Energy Shield",
+                                  "values": [
+                                    [
+                                      "42",
+                                      0
+                                    ]
+                                  ],
+                                  "displayMode": 0
+                                }
+                              ],
+                              "explicitMods": [
+                                {
+                                  "description": "+20 to maximum Life"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "skills": {
+                          "availability": "available",
+                          "entries": [
+                            {
+                              "id": "group-1",
+                              "skills": [
+                                {
+                                  "name": "Example Skill",
+                                  "level": 3,
+                                  "quality": 0
+                                }
+                              ],
+                              "supports": [
+                                {
+                                  "name": "Example Support"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "ascendancySkills": {
+                          "availability": "notApplicable",
+                          "entries": []
+                        },
+                        "passiveSkills": {
+                          "availability": "unavailable",
+                          "entries": []
+                        }
+                      },
+                      "tracking": {
+                        "status": "active",
+                        "reason": null,
+                        "firstSeenAt": "2026-09-18T21:00:00Z"
+                      },
+                      "refresh": {
+                        "status": "available",
+                        "nextAllowedAt": null,
+                        "operationId": null
+                      }
+                    }
+                  },
+                  "archived": {
+                    "value": {
+                      "build": {
+                        "game": "poe2",
+                        "character": {
+                          "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                          "name": "Ashwarden",
+                          "class": "Witch",
+                          "ascendancy": {
+                            "status": "none",
+                            "name": null
+                          },
+                          "level": 18
+                        },
+                        "league": {
+                          "id": "demo-emberfall",
+                          "name": "Emberfall",
+                          "startAt": "2026-09-04T19:00:00Z",
+                          "endAt": null,
+                          "rules": []
+                        },
+                        "observedAt": "2026-09-20T08:00:00Z",
+                        "definitionVersion": null,
+                        "equipment": {
+                          "availability": "available",
+                          "entries": [
+                            {
+                              "name": "Ember Ward",
+                              "typeLine": "Example Robe",
+                              "baseType": "Example Robe",
+                              "identified": true,
+                              "ilvl": 18,
+                              "frameTypeId": "rare",
+                              "inventoryId": "BodyArmour",
+                              "properties": [
+                                {
+                                  "name": "Energy Shield",
+                                  "values": [
+                                    [
+                                      "42",
+                                      0
+                                    ]
+                                  ],
+                                  "displayMode": 0
+                                }
+                              ],
+                              "explicitMods": [
+                                {
+                                  "description": "+20 to maximum Life"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "skills": {
+                          "availability": "available",
+                          "entries": [
+                            {
+                              "id": "group-1",
+                              "skills": [
+                                {
+                                  "name": "Example Skill",
+                                  "level": 3,
+                                  "quality": 0
+                                }
+                              ],
+                              "supports": [
+                                {
+                                  "name": "Example Support"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "ascendancySkills": {
+                          "availability": "notApplicable",
+                          "entries": []
+                        },
+                        "passiveSkills": {
+                          "availability": "unavailable",
+                          "entries": []
+                        }
+                      },
+                      "tracking": {
+                        "status": "archived",
+                        "reason": "permanentMigration",
+                        "firstSeenAt": "2026-09-18T21:00:00Z"
+                      },
+                      "refresh": {
+                        "status": "archived",
+                        "nextAllowedAt": null,
+                        "operationId": null
+                      }
+                    }
+                  },
+                  "partial": {
+                    "value": {
+                      "build": {
+                        "game": "poe2",
+                        "character": {
+                          "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                          "name": "Ashwarden",
+                          "class": "Witch",
+                          "ascendancy": {
+                            "status": "none",
+                            "name": null
+                          },
+                          "level": 18
+                        },
+                        "league": {
+                          "id": "demo-emberfall",
+                          "name": "Emberfall",
+                          "startAt": "2026-09-04T19:00:00Z",
+                          "endAt": null,
+                          "rules": []
+                        },
+                        "observedAt": "2026-09-20T08:00:00Z",
+                        "definitionVersion": null,
+                        "equipment": {
+                          "availability": "available",
+                          "entries": [
+                            {
+                              "name": "Ember Ward",
+                              "typeLine": "Example Robe",
+                              "baseType": "Example Robe",
+                              "identified": true,
+                              "ilvl": 18,
+                              "frameTypeId": "rare",
+                              "inventoryId": "BodyArmour",
+                              "properties": [
+                                {
+                                  "name": "Energy Shield",
+                                  "values": [
+                                    [
+                                      "42",
+                                      0
+                                    ]
+                                  ],
+                                  "displayMode": 0
+                                }
+                              ],
+                              "explicitMods": [
+                                {
+                                  "description": "+20 to maximum Life"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "skills": {
+                          "availability": "partial",
+                          "entries": [
+                            {
+                              "id": "group-1",
+                              "skills": [
+                                {
+                                  "name": "Example Skill",
+                                  "level": 3,
+                                  "quality": null
+                                }
+                              ],
+                              "supports": [
+                                {
+                                  "name": "Example Support"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "ascendancySkills": {
+                          "availability": "notApplicable",
+                          "entries": []
+                        },
+                        "passiveSkills": {
+                          "availability": "unavailable",
+                          "entries": []
+                        }
+                      },
+                      "tracking": {
+                        "status": "active",
+                        "reason": null,
+                        "firstSeenAt": "2026-09-18T21:00:00Z"
+                      },
+                      "refresh": {
+                        "status": "available",
+                        "nextAllowedAt": null,
+                        "operationId": null
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Delay in whole seconds when retryable; absent for archived/ineligible.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/poe2/characters/{characterId}/snapshots": {
+      "get": {
+        "operationId": "listPoe2Snapshots",
+        "tags": [
+          "Poe2"
+        ],
+        "description": "Saved history summaries across this character\u2019s tracked leagues. Each summary retains league metadata.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "characterId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 30
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-cache"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeSnapshots"
+                },
+                "examples": {
+                  "populated": {
+                    "value": {
+                      "snapshots": [
+                        {
+                          "id": "demo-snapshot",
+                          "league": {
+                            "id": "demo-emberfall",
+                            "name": "Emberfall",
+                            "startAt": "2026-09-04T19:00:00Z",
+                            "endAt": null,
+                            "rules": []
+                          },
+                          "scheduledAt": "2026-09-20T08:00:00Z",
+                          "historyDate": "2026-09-20",
+                          "observedAt": "2026-09-20T08:00:00Z",
+                          "level": 18
+                        }
+                      ],
+                      "nextCursor": null
+                    }
+                  },
+                  "empty": {
+                    "value": {
+                      "snapshots": [],
+                      "nextCursor": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Delay in whole seconds when retryable; absent for archived/ineligible.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/poe2/characters/{characterId}/snapshots/{snapshotId}": {
+      "get": {
+        "operationId": "getPoe2Snapshot",
+        "tags": [
+          "Poe2"
+        ],
+        "description": "Immutable saved build; no mutable cooldown metadata.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "characterId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "in": "path",
+            "name": "snapshotId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-cache"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Poe2Snapshot"
+                },
+                "example": {
+                  "snapshot": {
+                    "id": "demo-snapshot",
+                    "league": {
+                      "id": "demo-emberfall",
+                      "name": "Emberfall",
+                      "startAt": "2026-09-04T19:00:00Z",
+                      "endAt": null,
+                      "rules": []
+                    },
+                    "scheduledAt": "2026-09-20T08:00:00Z",
+                    "historyDate": "2026-09-20",
+                    "observedAt": "2026-09-20T08:00:00Z",
+                    "level": 18
+                  },
+                  "build": {
+                    "game": "poe2",
+                    "character": {
+                      "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "name": "Ashwarden",
+                      "class": "Witch",
+                      "ascendancy": {
+                        "status": "none",
+                        "name": null
+                      },
+                      "level": 18
+                    },
+                    "league": {
+                      "id": "demo-emberfall",
+                      "name": "Emberfall",
+                      "startAt": "2026-09-04T19:00:00Z",
+                      "endAt": null,
+                      "rules": []
+                    },
+                    "observedAt": "2026-09-20T08:00:00Z",
+                    "definitionVersion": null,
+                    "equipment": {
+                      "availability": "available",
+                      "entries": [
+                        {
+                          "name": "Ember Ward",
+                          "typeLine": "Example Robe",
+                          "baseType": "Example Robe",
+                          "identified": true,
+                          "ilvl": 18,
+                          "frameTypeId": "rare",
+                          "inventoryId": "BodyArmour",
+                          "properties": [
+                            {
+                              "name": "Energy Shield",
+                              "values": [
+                                [
+                                  "42",
+                                  0
+                                ]
+                              ],
+                              "displayMode": 0
+                            }
+                          ],
+                          "explicitMods": [
+                            {
+                              "description": "+20 to maximum Life"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "skills": {
+                      "availability": "available",
+                      "entries": [
+                        {
+                          "id": "group-1",
+                          "skills": [
+                            {
+                              "name": "Example Skill",
+                              "level": 3,
+                              "quality": 0
+                            }
+                          ],
+                          "supports": [
+                            {
+                              "name": "Example Support"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "ascendancySkills": {
+                      "availability": "notApplicable",
+                      "entries": []
+                    },
+                    "passiveSkills": {
+                      "availability": "unavailable",
+                      "entries": []
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Delay in whole seconds when retryable; absent for archived/ineligible.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/poe2/characters/{characterId}/refresh": {
+      "post": {
+        "operationId": "refreshPoe2Character",
+        "tags": [
+          "Poe2"
+        ],
+        "description": "Admit asynchronous refresh for this character\u2019s current eligible participation, resolved by the server. Recheck eligibility before commit; never import a permanent-league build into retained history. Atomically reserve five-minute cooldown. No historical write. Current manual operation returns 409 refresh_in_progress with operationId; scheduled lease also returns 409 without a public operationId. Cooldown returns 429 with nextAllowedAt and Retry-After. Ineligible participation returns 409 refresh_not_allowed. Rejected requests do not extend cooldown. Worker performs one bounded attempt; terminal failure remains failed until a newly admitted manual request. Scheduled retry policy remains separate.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "characterId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Success",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Location": {
+                "description": "Relative operation-status URL.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Suggested polling delay in whole seconds; present only while pending/running.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeRefreshOperation"
+                },
+                "example": {
+                  "id": "demo-operation",
+                  "characterId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "leagueId": "demo-emberfall",
+                  "status": "pending",
+                  "acceptedAt": "2026-09-20T14:00:00Z",
+                  "completedAt": null,
+                  "nextAllowedAt": "2026-09-20T14:05:00Z",
+                  "error": null
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Delay in whole seconds when retryable; absent for archived/ineligible.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                },
+                "example": {
+                  "type": "about:blank",
+                  "title": "Refresh cooldown active",
+                  "status": 429,
+                  "code": "cooldown_active",
+                  "traceId": "example-trace",
+                  "nextAllowedAt": "2026-09-20T14:05:00Z"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Delay in whole seconds when retryable; absent for archived/ineligible.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                },
+                "examples": {
+                  "inProgress": {
+                    "value": {
+                      "type": "about:blank",
+                      "title": "Refresh already running",
+                      "status": 409,
+                      "code": "refresh_in_progress",
+                      "traceId": "example-trace",
+                      "operationId": "demo-operation"
+                    }
+                  },
+                  "archived": {
+                    "value": {
+                      "type": "about:blank",
+                      "title": "Archived character cannot refresh",
+                      "status": 409,
+                      "code": "refresh_not_allowed",
+                      "traceId": "example-trace"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/poe2/refresh-operations/{operationId}": {
+      "get": {
+        "operationId": "getPoe2RefreshOperation",
+        "tags": [
+          "Poe2"
+        ],
+        "description": "Poll only while pending/running, using Retry-After; stop on completion. Operation lookup is game scoped.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "operationId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Suggested polling delay in whole seconds; present only while pending/running.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeRefreshOperation"
+                },
+                "examples": {
+                  "pending": {
+                    "value": {
+                      "id": "demo-operation",
+                      "characterId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "leagueId": "demo-emberfall",
+                      "status": "pending",
+                      "acceptedAt": "2026-09-20T14:00:00Z",
+                      "completedAt": null,
+                      "nextAllowedAt": "2026-09-20T14:05:00Z",
+                      "error": null
+                    }
+                  },
+                  "succeeded": {
+                    "value": {
+                      "id": "demo-operation",
+                      "characterId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "leagueId": "demo-emberfall",
+                      "status": "succeeded",
+                      "acceptedAt": "2026-09-20T14:00:00Z",
+                      "completedAt": "2026-09-20T14:00:04Z",
+                      "nextAllowedAt": "2026-09-20T14:05:00Z",
+                      "error": null
+                    }
+                  },
+                  "failed": {
+                    "value": {
+                      "id": "demo-operation",
+                      "characterId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "leagueId": "demo-emberfall",
+                      "status": "failed",
+                      "acceptedAt": "2026-09-20T14:00:00Z",
+                      "completedAt": "2026-09-20T14:00:04Z",
+                      "nextAllowedAt": "2026-09-20T14:05:00Z",
+                      "error": {
+                        "type": "about:blank",
+                        "title": "Provider unavailable",
+                        "status": 503,
+                        "code": "provider_unavailable",
+                        "traceId": "example-trace"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Delay in whole seconds when retryable; absent for archived/ineligible.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Problem Details; inspect code.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoeProblem"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1041,6 +3865,1038 @@
           "baselineScore",
           "baselineWeekIndex"
         ]
+      },
+      "PoeLeague": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "startAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "endAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "name"
+              ]
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "startAt",
+          "endAt",
+          "rules"
+        ],
+        "description": "Actual temporary public league variant. Dates may be unknown; no WoW fallback. IDs are opaque, scoped by game."
+      },
+      "PoeAscendancy": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "known",
+              "none",
+              "unavailable"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "status",
+          "name"
+        ],
+        "description": "Known requires a name; none/unavailable require null. None hides the section; unavailable must not claim the character has no ascendancy."
+      },
+      "PoeIdentity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "class": {
+            "type": "string"
+          },
+          "ascendancy": {
+            "$ref": "#/components/schemas/PoeAscendancy"
+          },
+          "level": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "class",
+          "ascendancy",
+          "level"
+        ],
+        "description": "Class is the resolved base class; ascendancy separate. All values are from the selected observation. IDs are stable and not names."
+      },
+      "PoeTracking": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "archived"
+            ]
+          },
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              null,
+              "leagueEnded",
+              "permanentMigration",
+              "missing",
+              "ineligible"
+            ]
+          },
+          "firstSeenAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "status",
+          "reason",
+          "firstSeenAt"
+        ],
+        "description": "Operational state, never embedded in immutable snapshot content. Missing requires successful complete discovery; absence is not proof of deletion."
+      },
+      "PoeRosterEntry": {
+        "type": "object",
+        "properties": {
+          "character": {
+            "$ref": "#/components/schemas/PoeIdentity"
+          },
+          "league": {
+            "$ref": "#/components/schemas/PoeLeague"
+          },
+          "tracking": {
+            "$ref": "#/components/schemas/PoeTracking"
+          },
+          "observedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "buildAvailable": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "character",
+          "league",
+          "tracking",
+          "observedAt",
+          "buildAvailable"
+        ],
+        "description": "ObservedAt dates the displayed identity. Discovery can supply roster identity before the first successful build."
+      },
+      "PoeRoster": {
+        "type": "object",
+        "properties": {
+          "game": {
+            "type": "string",
+            "enum": [
+              "poe",
+              "poe2"
+            ]
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "startAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "characters": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PoeRosterEntry"
+                  }
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "startAt",
+                "characters"
+              ]
+            }
+          }
+        },
+        "required": [
+          "game",
+          "groups"
+        ],
+        "description": "Stored data only, including archived participation. Groups by league family, start descending (unknown last), then ID. Characters level descending, case-insensitive name then character ID then league ID. Empty groups omitted."
+      },
+      "PoeItemProperty": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              ],
+              "minItems": 2,
+              "maxItems": 2
+            }
+          },
+          "displayMode": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "type": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "suffix": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "values"
+        ],
+        "description": "GGG-compatible display property. Do not assume every property is a numeric stat."
+      },
+      "PoeItemMod": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "flags": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "boolean"
+            }
+          }
+        },
+        "required": [
+          "description"
+        ]
+      },
+      "PoeItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "typeLine": {
+            "type": "string"
+          },
+          "baseType": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "rarity": {
+            "type": "string"
+          },
+          "ilvl": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "identified": {
+            "type": "boolean"
+          },
+          "inventoryId": {
+            "type": "string"
+          },
+          "frameTypeId": {
+            "type": "string"
+          },
+          "corrupted": {
+            "type": "boolean"
+          },
+          "properties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PoeItemProperty"
+            }
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PoeItemProperty"
+            }
+          },
+          "implicitMods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PoeItemMod"
+            }
+          },
+          "explicitMods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PoeItemMod"
+            }
+          },
+          "enchantMods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "runeMods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "flavourText": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "socketedItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PoeItem"
+            }
+          },
+          "sockets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "group": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "attr": {
+                  "type": "string"
+                },
+                "sColour": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "item": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "group"
+              ]
+            }
+          }
+        },
+        "required": [
+          "name",
+          "typeLine",
+          "baseType",
+          "identified",
+          "ilvl",
+          "frameTypeId"
+        ],
+        "description": "GGG-shaped allowlisted equipment subset, not a complete reproduction of Item. Optional fields omitted when unavailable. No inventory or user notes. Unknown future properties ignored by clients."
+      },
+      "PoeGem": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "level": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "quality": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          }
+        },
+        "required": [
+          "name",
+          "level",
+          "quality"
+        ],
+        "description": "Skill gem in either game, or PoE support gem. Quality is a percentage number, e.g. 20. Null means applicable but unavailable; zero is valid. No arbitrary maximum of 20."
+      },
+      "Poe2Support": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "description": "PoE2 support has no level or quality properties."
+      },
+      "PoeSkillGroup": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "skills": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PoeGem"
+            }
+          },
+          "supports": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PoeGem"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "skills",
+          "supports"
+        ],
+        "description": "One linked socket group; multiple active skills are allowed. Linkage does not assert calculated support compatibility."
+      },
+      "Poe2SkillGroup": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "skills": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PoeGem"
+            }
+          },
+          "supports": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Poe2Support"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "skills",
+          "supports"
+        ],
+        "description": "Skill/support relationship resolved by the PoE2 adapter, not PoE socket rules."
+      },
+      "PoePassive": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "stats": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "definitionStatus": {
+            "type": "string",
+            "enum": [
+              "resolved",
+              "unavailable"
+            ]
+          },
+          "setIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "selectedEffectId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "stats",
+          "definitionStatus",
+          "setIds",
+          "selectedEffectId"
+        ],
+        "description": "Retain unresolved IDs. Set IDs preserve alternate allocations; selected effect supports mastery choices. Empty stats do not imply no effect when definition is unavailable."
+      },
+      "PoeEquipmentSection": {
+        "type": "object",
+        "properties": {
+          "availability": {
+            "type": "string",
+            "enum": [
+              "available",
+              "partial",
+              "unavailable"
+            ]
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PoeItem"
+            }
+          }
+        },
+        "required": [
+          "availability",
+          "entries"
+        ],
+        "description": "Available plus an empty list means confirmed empty. Unavailable/notApplicable require empty entries. Partial retains known entries from this observation only; never silently substitute older data."
+      },
+      "PoeSkillsSection": {
+        "type": "object",
+        "properties": {
+          "availability": {
+            "type": "string",
+            "enum": [
+              "available",
+              "partial",
+              "unavailable"
+            ]
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PoeSkillGroup"
+            }
+          }
+        },
+        "required": [
+          "availability",
+          "entries"
+        ],
+        "description": "Available plus an empty list means confirmed empty. Unavailable/notApplicable require empty entries. Partial retains known entries from this observation only; never silently substitute older data."
+      },
+      "Poe2SkillsSection": {
+        "type": "object",
+        "properties": {
+          "availability": {
+            "type": "string",
+            "enum": [
+              "available",
+              "partial",
+              "unavailable"
+            ]
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Poe2SkillGroup"
+            }
+          }
+        },
+        "required": [
+          "availability",
+          "entries"
+        ],
+        "description": "Available plus an empty list means confirmed empty. Unavailable/notApplicable require empty entries. Partial retains known entries from this observation only; never silently substitute older data."
+      },
+      "PoePassivesSection": {
+        "type": "object",
+        "properties": {
+          "availability": {
+            "type": "string",
+            "enum": [
+              "available",
+              "partial",
+              "unavailable"
+            ]
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PoePassive"
+            }
+          }
+        },
+        "required": [
+          "availability",
+          "entries"
+        ],
+        "description": "Available plus an empty list means confirmed empty. Unavailable/notApplicable require empty entries. Partial retains known entries from this observation only; never silently substitute older data."
+      },
+      "PoeAscendancySection": {
+        "type": "object",
+        "properties": {
+          "availability": {
+            "type": "string",
+            "enum": [
+              "available",
+              "partial",
+              "unavailable",
+              "notApplicable"
+            ]
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PoePassive"
+            }
+          }
+        },
+        "required": [
+          "availability",
+          "entries"
+        ],
+        "description": "Available plus an empty list means confirmed empty. Unavailable/notApplicable require empty entries. Partial retains known entries from this observation only; never silently substitute older data."
+      },
+      "PoeBuild": {
+        "type": "object",
+        "properties": {
+          "game": {
+            "type": "string",
+            "const": "poe"
+          },
+          "character": {
+            "$ref": "#/components/schemas/PoeIdentity"
+          },
+          "league": {
+            "$ref": "#/components/schemas/PoeLeague"
+          },
+          "observedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "definitionVersion": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "equipment": {
+            "$ref": "#/components/schemas/PoeEquipmentSection"
+          },
+          "skills": {
+            "$ref": "#/components/schemas/PoeSkillsSection"
+          },
+          "ascendancySkills": {
+            "$ref": "#/components/schemas/PoeAscendancySection"
+          },
+          "passiveSkills": {
+            "$ref": "#/components/schemas/PoePassivesSection"
+          }
+        },
+        "required": [
+          "game",
+          "character",
+          "league",
+          "observedAt",
+          "definitionVersion",
+          "equipment",
+          "skills",
+          "ascendancySkills",
+          "passiveSkills"
+        ],
+        "description": "One observation, with identity/league/gem/tree data from that time. No mixed-date fallback. Confirmed absent ascendancy uses notApplicable with empty entries."
+      },
+      "Poe2Build": {
+        "type": "object",
+        "properties": {
+          "game": {
+            "type": "string",
+            "const": "poe2"
+          },
+          "character": {
+            "$ref": "#/components/schemas/PoeIdentity"
+          },
+          "league": {
+            "$ref": "#/components/schemas/PoeLeague"
+          },
+          "observedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "definitionVersion": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "equipment": {
+            "$ref": "#/components/schemas/PoeEquipmentSection"
+          },
+          "skills": {
+            "$ref": "#/components/schemas/Poe2SkillsSection"
+          },
+          "ascendancySkills": {
+            "$ref": "#/components/schemas/PoeAscendancySection"
+          },
+          "passiveSkills": {
+            "$ref": "#/components/schemas/PoePassivesSection"
+          }
+        },
+        "required": [
+          "game",
+          "character",
+          "league",
+          "observedAt",
+          "definitionVersion",
+          "equipment",
+          "skills",
+          "ascendancySkills",
+          "passiveSkills"
+        ],
+        "description": "One observation, with identity/league/gem/tree data from that time. No mixed-date fallback. Confirmed absent ascendancy uses notApplicable with empty entries."
+      },
+      "PoeRefreshState": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "available",
+              "cooldown",
+              "inProgress",
+              "archived"
+            ]
+          },
+          "nextAllowedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "operationId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "status",
+          "nextAllowedAt",
+          "operationId"
+        ],
+        "description": "Five-minute shared cooldown from admitted manual request; scheduled collections do not reset it. InProgress may also be scheduled work. OperationId only when a public manual operation exists."
+      },
+      "PoeLatest": {
+        "type": "object",
+        "properties": {
+          "build": {
+            "$ref": "#/components/schemas/PoeBuild"
+          },
+          "tracking": {
+            "$ref": "#/components/schemas/PoeTracking"
+          },
+          "refresh": {
+            "$ref": "#/components/schemas/PoeRefreshState"
+          }
+        },
+        "required": [
+          "build",
+          "tracking",
+          "refresh"
+        ]
+      },
+      "PoeSnapshot": {
+        "type": "object",
+        "properties": {
+          "snapshot": {
+            "$ref": "#/components/schemas/PoeSnapshotSummary"
+          },
+          "build": {
+            "$ref": "#/components/schemas/PoeBuild"
+          }
+        },
+        "required": [
+          "snapshot",
+          "build"
+        ]
+      },
+      "Poe2Latest": {
+        "type": "object",
+        "properties": {
+          "build": {
+            "$ref": "#/components/schemas/Poe2Build"
+          },
+          "tracking": {
+            "$ref": "#/components/schemas/PoeTracking"
+          },
+          "refresh": {
+            "$ref": "#/components/schemas/PoeRefreshState"
+          }
+        },
+        "required": [
+          "build",
+          "tracking",
+          "refresh"
+        ]
+      },
+      "Poe2Snapshot": {
+        "type": "object",
+        "properties": {
+          "snapshot": {
+            "$ref": "#/components/schemas/PoeSnapshotSummary"
+          },
+          "build": {
+            "$ref": "#/components/schemas/Poe2Build"
+          }
+        },
+        "required": [
+          "snapshot",
+          "build"
+        ]
+      },
+      "PoeSnapshotSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "league": {
+            "$ref": "#/components/schemas/PoeLeague"
+          },
+          "scheduledAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "historyDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "observedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "level": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "id",
+          "league",
+          "scheduledAt",
+          "historyDate",
+          "observedAt",
+          "level"
+        ],
+        "description": "HistoryDate is intended America/Chicago collection date, not retry date. ObservedAt is actual successful fetch time. Snapshot content is immutable."
+      },
+      "PoeSnapshots": {
+        "type": "object",
+        "properties": {
+          "snapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PoeSnapshotSummary"
+            }
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "snapshots",
+          "nextCursor"
+        ],
+        "description": "ScheduledAt descending then ID. Opaque cursor; new snapshots do not duplicate entries already returned. Empty list is valid; no invented daily entries after cadence becomes weekly."
+      },
+      "PoeProblem": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "format": "uri-reference"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "minimum": 400,
+            "maximum": 599
+          },
+          "code": {
+            "type": "string",
+            "enum": [
+              "invalid_request",
+              "character_not_found",
+              "snapshot_not_found",
+              "build_unavailable",
+              "refresh_in_progress",
+              "refresh_not_allowed",
+              "cooldown_active",
+              "rate_limited",
+              "provider_unavailable",
+              "unexpected_error",
+              "operation_not_found"
+            ]
+          },
+          "traceId": {
+            "type": "string"
+          },
+          "nextAllowedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "operationId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "type",
+          "title",
+          "status",
+          "code",
+          "traceId"
+        ]
+      },
+      "PoeRefreshOperation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "characterId": {
+            "type": "string"
+          },
+          "leagueId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "running",
+              "succeeded",
+              "failed"
+            ]
+          },
+          "acceptedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "nextAllowedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "error": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PoeProblem"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "characterId",
+          "leagueId",
+          "status",
+          "acceptedAt",
+          "completedAt",
+          "nextAllowedAt",
+          "error"
+        ],
+        "description": "Completed operation records are retained for 24 hours after completedAt, then eligible for cleanup. This does not expire character builds or snapshots. Succeeded means latest commit completed; re-read latest and roster. Failed retains previous build. CompletedAt only terminal; error only failed. No automatic repeated POST after uncertain network outcome: GET latest refresh state first."
       }
     }
   },

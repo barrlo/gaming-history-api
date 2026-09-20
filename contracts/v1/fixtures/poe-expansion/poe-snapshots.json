@@ -1,0 +1,19 @@
+{
+  "snapshots": [
+    {
+      "id": "demo-snapshot",
+      "league": {
+        "id": "demo-emberfall",
+        "name": "Emberfall",
+        "startAt": "2026-09-04T19:00:00Z",
+        "endAt": null,
+        "rules": []
+      },
+      "scheduledAt": "2026-09-20T08:00:00Z",
+      "historyDate": "2026-09-20",
+      "observedAt": "2026-09-20T08:00:00Z",
+      "level": 18
+    }
+  ],
+  "nextCursor": null
+}
