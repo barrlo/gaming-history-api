@@ -1,0 +1,105 @@
+{
+  "contractVersion": "0.4.0-review",
+  "examples": [
+    {
+      "file": "fixtures/poe-expansion/poe-archived.json",
+      "game": "poe",
+      "schema": "PoeLatest"
+    },
+    {
+      "file": "fixtures/poe-expansion/poe-cooldown.json",
+      "game": "poe",
+      "schema": "PoeProblem"
+    },
+    {
+      "file": "fixtures/poe-expansion/poe-latest.json",
+      "game": "poe",
+      "schema": "PoeLatest"
+    },
+    {
+      "file": "fixtures/poe-expansion/poe-partial.json",
+      "game": "poe",
+      "schema": "PoeLatest"
+    },
+    {
+      "file": "fixtures/poe-expansion/poe-refresh-failed.json",
+      "game": "poe",
+      "schema": "PoeRefreshOperation"
+    },
+    {
+      "file": "fixtures/poe-expansion/poe-refresh-in-progress.json",
+      "game": "poe",
+      "schema": "PoeProblem"
+    },
+    {
+      "file": "fixtures/poe-expansion/poe-refresh-not-allowed.json",
+      "game": "poe",
+      "schema": "PoeProblem"
+    },
+    {
+      "file": "fixtures/poe-expansion/poe-roster.json",
+      "game": "poe",
+      "schema": "PoeRoster"
+    },
+    {
+      "file": "fixtures/poe-expansion/poe-snapshot.json",
+      "game": "poe",
+      "schema": "PoeSnapshot"
+    },
+    {
+      "file": "fixtures/poe-expansion/poe-snapshots.json",
+      "game": "poe",
+      "schema": "PoeSnapshots"
+    },
+    {
+      "file": "fixtures/poe-expansion/poe2-archived.json",
+      "game": "poe2",
+      "schema": "Poe2Latest"
+    },
+    {
+      "file": "fixtures/poe-expansion/poe2-cooldown.json",
+      "game": "poe2",
+      "schema": "PoeProblem"
+    },
+    {
+      "file": "fixtures/poe-expansion/poe2-latest.json",
+      "game": "poe2",
+      "schema": "Poe2Latest"
+    },
+    {
+      "file": "fixtures/poe-expansion/poe2-partial.json",
+      "game": "poe2",
+      "schema": "Poe2Latest"
+    },
+    {
+      "file": "fixtures/poe-expansion/poe2-refresh-failed.json",
+      "game": "poe2",
+      "schema": "PoeRefreshOperation"
+    },
+    {
+      "file": "fixtures/poe-expansion/poe2-refresh-in-progress.json",
+      "game": "poe2",
+      "schema": "PoeProblem"
+    },
+    {
+      "file": "fixtures/poe-expansion/poe2-refresh-not-allowed.json",
+      "game": "poe2",
+      "schema": "PoeProblem"
+    },
+    {
+      "file": "fixtures/poe-expansion/poe2-roster.json",
+      "game": "poe2",
+      "schema": "PoeRoster"
+    },
+    {
+      "file": "fixtures/poe-expansion/poe2-snapshot.json",
+      "game": "poe2",
+      "schema": "Poe2Snapshot"
+    },
+    {
+      "file": "fixtures/poe-expansion/poe2-snapshots.json",
+      "game": "poe2",
+      "schema": "PoeSnapshots"
+    }
+  ]
+}

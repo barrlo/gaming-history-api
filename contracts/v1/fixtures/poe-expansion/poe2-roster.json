@@ -1,0 +1,38 @@
+{
+  "game": "poe2",
+  "groups": [
+    {
+      "id": "demo-family",
+      "name": "Emberfall",
+      "startAt": "2026-09-04T19:00:00Z",
+      "characters": [
+        {
+          "character": {
+            "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "name": "Ashwarden",
+            "class": "Witch",
+            "ascendancy": {
+              "status": "none",
+              "name": null
+            },
+            "level": 18
+          },
+          "league": {
+            "id": "demo-emberfall",
+            "name": "Emberfall",
+            "startAt": "2026-09-04T19:00:00Z",
+            "endAt": null,
+            "rules": []
+          },
+          "tracking": {
+            "status": "active",
+            "reason": null,
+            "firstSeenAt": "2026-09-18T21:00:00Z"
+          },
+          "observedAt": "2026-09-20T08:00:00Z",
+          "buildAvailable": true
+        }
+      ]
+    }
+  ]
+}

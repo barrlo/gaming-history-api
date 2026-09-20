@@ -1,0 +1,99 @@
+{
+  "snapshot": {
+    "id": "demo-snapshot",
+    "league": {
+      "id": "demo-emberfall",
+      "name": "Emberfall",
+      "startAt": "2026-09-04T19:00:00Z",
+      "endAt": null,
+      "rules": []
+    },
+    "scheduledAt": "2026-09-20T08:00:00Z",
+    "historyDate": "2026-09-20",
+    "observedAt": "2026-09-20T08:00:00Z",
+    "level": 18
+  },
+  "build": {
+    "game": "poe",
+    "character": {
+      "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "name": "Ashwarden",
+      "class": "Witch",
+      "ascendancy": {
+        "status": "none",
+        "name": null
+      },
+      "level": 18
+    },
+    "league": {
+      "id": "demo-emberfall",
+      "name": "Emberfall",
+      "startAt": "2026-09-04T19:00:00Z",
+      "endAt": null,
+      "rules": []
+    },
+    "observedAt": "2026-09-20T08:00:00Z",
+    "definitionVersion": null,
+    "equipment": {
+      "availability": "available",
+      "entries": [
+        {
+          "name": "Ember Ward",
+          "typeLine": "Example Robe",
+          "baseType": "Example Robe",
+          "identified": true,
+          "ilvl": 18,
+          "frameTypeId": "rare",
+          "inventoryId": "BodyArmour",
+          "properties": [
+            {
+              "name": "Energy Shield",
+              "values": [
+                [
+                  "42",
+                  0
+                ]
+              ],
+              "displayMode": 0
+            }
+          ],
+          "explicitMods": [
+            {
+              "description": "+20 to maximum Life"
+            }
+          ]
+        }
+      ]
+    },
+    "skills": {
+      "availability": "available",
+      "entries": [
+        {
+          "id": "group-1",
+          "skills": [
+            {
+              "name": "Example Skill",
+              "level": 3,
+              "quality": 0
+            }
+          ],
+          "supports": [
+            {
+              "name": "Example Support",
+              "level": 3,
+              "quality": 0
+            }
+          ]
+        }
+      ]
+    },
+    "ascendancySkills": {
+      "availability": "notApplicable",
+      "entries": []
+    },
+    "passiveSkills": {
+      "availability": "unavailable",
+      "entries": []
+    }
+  }
+}

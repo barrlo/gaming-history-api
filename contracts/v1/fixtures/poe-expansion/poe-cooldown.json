@@ -1,0 +1,8 @@
+{
+  "type": "about:blank",
+  "title": "Refresh cooldown active",
+  "status": 429,
+  "code": "cooldown_active",
+  "traceId": "example-trace",
+  "nextAllowedAt": "2026-09-20T14:05:00Z"
+}

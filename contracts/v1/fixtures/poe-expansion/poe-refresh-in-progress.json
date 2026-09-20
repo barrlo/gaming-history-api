@@ -1,0 +1,8 @@
+{
+  "type": "about:blank",
+  "title": "Refresh already running",
+  "status": 409,
+  "code": "refresh_in_progress",
+  "traceId": "example-trace",
+  "operationId": "demo-operation"
+}

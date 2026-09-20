@@ -1,0 +1,16 @@
+{
+  "id": "demo-operation",
+  "characterId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "leagueId": "demo-emberfall",
+  "status": "failed",
+  "acceptedAt": "2026-09-20T14:00:00Z",
+  "completedAt": "2026-09-20T14:00:04Z",
+  "nextAllowedAt": "2026-09-20T14:05:00Z",
+  "error": {
+    "type": "about:blank",
+    "title": "Provider unavailable",
+    "status": 503,
+    "code": "provider_unavailable",
+    "traceId": "example-trace"
+  }
+}

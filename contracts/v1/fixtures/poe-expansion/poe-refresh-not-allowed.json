@@ -1,0 +1,7 @@
+{
+  "type": "about:blank",
+  "title": "Archived character cannot refresh",
+  "status": 409,
+  "code": "refresh_not_allowed",
+  "traceId": "example-trace"
+}
