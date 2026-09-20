@@ -74,11 +74,27 @@ public sealed class WowRosterTests
     {
         await using var factory = CreateFactory(new Dictionary<string, string?> { ["Mock:CurrentFailureAttempts:char-aeloria"] = "3" });
         using var client = factory.CreateClient();
-        var responses = await Task.WhenAll(Enumerable.Range(0, 12)
-            .Select(_ => client.GetAsync("/api/v1/wow/characters/char-aeloria/current-score")));
+        var requests = new Task<HttpResponseMessage>[12];
 
-        Assert.Equal(3, responses.Count(response => response.StatusCode == HttpStatusCode.ServiceUnavailable));
-        Assert.Equal(9, responses.Count(response => response.StatusCode == HttpStatusCode.OK));
+        for (var index = 0; index < requests.Length; index++)
+        {
+            requests[index] = client.GetAsync("/api/v1/wow/characters/char-aeloria/current-score");
+        }
+
+        var responses = await Task.WhenAll(requests);
+
+        try
+        {
+            Assert.Equal(3, responses.Count(response => response.StatusCode == HttpStatusCode.ServiceUnavailable));
+            Assert.Equal(9, responses.Count(response => response.StatusCode == HttpStatusCode.OK));
+        }
+        finally
+        {
+            foreach (var response in responses)
+            {
+                response.Dispose();
+            }
+        }
     }
 
     [Theory]

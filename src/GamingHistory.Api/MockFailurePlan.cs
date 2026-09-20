@@ -3,7 +3,7 @@ namespace GamingHistory.Api;
 // Development-only, process-local failures make retries reproducible without an upstream service.
 public sealed class MockFailurePlan
 {
-    private readonly object _gate = new();
+    private readonly Lock _gate = new();
     private readonly Dictionary<string, int> _currentAttempts;
     private int _rosterAttempts;
 
