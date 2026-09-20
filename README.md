@@ -28,7 +28,23 @@ Mock__Scenario=season-start dotnet run --project src/GamingHistory.Api
 Mock__CurrentFailureCharacterIds__0=char-aeloria dotnet run --project src/GamingHistory.Api
 ```
 
-The second command simulates an independent current-score failure while history stays available. All six scenario names are in contracts/v1/fixtures/manifest.json. Invalid scenario configuration fails startup. Swagger UI assets are served locally by Swashbuckle.AspNetCore.SwaggerUI; the specification is the canonical file, not an inferred/generated replacement.
+The second command simulates an independent current-score failure while history stays available.
+
+To exercise recovery through the roster or row Retry actions, configure a finite number of failed requests:
+
+```sh
+Mock__RosterFailureAttempts=1 dotnet run --project src/GamingHistory.Api
+```
+
+Use the exact character ID as the configuration key: the fictional IDs contain hyphens, so use `appsettings.Development.json` (or the `env` command) for those keys:
+
+```sh
+env 'Mock__CurrentFailureAttempts__char-aeloria=1' dotnet run --project src/GamingHistory.Api
+```
+
+`Mock:RosterFailureAttempts` returns a 503 problem for the first configured number of roster requests; subsequent requests return the approved roster. `Mock:CurrentFailureAttempts` maps character IDs to equivalent per-character counts. These process-local counters reset on restart and are shared across clients, with atomic consumption under concurrent requests. Invalid season selectors, unknown characters, history requests, and roster requests do not consume a character's failure count. The permanent `CurrentFailureCharacterIds` setting takes precedence. Negative counts fail configuration validation. Error responses are never cached; successful mock timestamps remain frozen. These development switches are not public request parameters or production retry/caching behavior.
+
+ All six scenario names are in contracts/v1/fixtures/manifest.json. Invalid scenario configuration fails startup. Swagger UI assets are served locally by Swashbuckle.AspNetCore.SwaggerUI; the specification is the canonical file, not an inferred/generated replacement.
 
 Season metadata in all mock responses now comes from `SeasonCalendar`, evaluated at the selected scenario's frozen clock. The independent fictional definitions preserve stable IDs and the approved fixtures. Starts are inclusive, ends exclusive; a configured gap returns a null season. Unknown ends use the next configured season start or, if there is none, nine calendar months with month-end clamping. Inferred dates stay marked estimated. Announced ends win; invalid durations, duplicate IDs, and confirmed overlaps fail configuration validation. Invalid configuration is not treated as an empty season gap. The mock catalog is configured at startup; mapping future runtime catalog failures to `season_unavailable` remains part of the persistence integration.
 
