@@ -2,7 +2,6 @@ using GamingHistory.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<MockData>();
-builder.Services.AddSingleton<MockFailurePlan>();
 builder.Services.AddSingleton<PoeRosterData>();
 var app = builder.Build();
 var data = app.Services.GetRequiredService<MockData>();

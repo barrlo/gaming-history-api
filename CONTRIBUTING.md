@@ -15,3 +15,7 @@ Remove unused `using` directives and leave a blank line after the import group. 
 The repository `.editorconfig` configures unused-import checks, required braces, and blank lines after blocks for `dotnet format` and the existing CI format check. Rider/ReSharper settings additionally enforce blank lines before blocks when formatting; that before-block convention also needs code review because `dotnet format` does not support that setting.
 
 Leave a blank line before a `return` statement when another statement precedes it in the same block. A return that is the first statement in a block does not need padding against the opening brace. UI ESLint enforces this convention; API Rider/ReSharper formatting supports it through the control-transfer spacing setting (which also applies to other control-transfer statements). The API CLI formatter does not enforce this specific rule.
+
+# Failure testing
+
+Use UI MSW handlers to test error and retry interactions. Do not add committed API failure counters or retry-simulation configuration solely for manual local testing. If a running API must temporarily fail during a manual check, use a targeted uncommitted change and remove it after testing. Existing simple mock scenarios and automated API error-response tests remain supported.

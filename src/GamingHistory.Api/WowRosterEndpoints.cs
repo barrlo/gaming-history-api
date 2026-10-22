@@ -4,19 +4,17 @@ public static class WowRosterEndpoints
 {
     public static void MapWowRosterEndpoints(this WebApplication app)
     {
-        app.MapGet("/api/v1/wow/characters", (HttpContext context, MockData data, MockFailurePlan failures) =>
-            failures.FailRoster()
-                ? ApiResponses.Problem(context, "data_unavailable", 503)
-                : ApiResponses.Fixture(context, data.Roster));
+        app.MapGet("/api/v1/wow/characters", (HttpContext context, MockData data) =>
+            ApiResponses.Fixture(context, data.Roster));
         app.MapGet("/api/v1/wow/characters/{characterId}/history",
-            (HttpContext context, string characterId, MockData data, MockFailurePlan failures) =>
-                ReadCharacter(context, characterId, false, data, failures));
+            (HttpContext context, string characterId, MockData data) =>
+                ReadCharacter(context, characterId, false, data));
         app.MapGet("/api/v1/wow/characters/{characterId}/current-score",
-            (HttpContext context, string characterId, MockData data, MockFailurePlan failures) =>
-                ReadCharacter(context, characterId, true, data, failures));
+            (HttpContext context, string characterId, MockData data) =>
+                ReadCharacter(context, characterId, true, data));
     }
 
-    private static IResult ReadCharacter(HttpContext context, string characterId, bool current, MockData data, MockFailurePlan failures)
+    private static IResult ReadCharacter(HttpContext context, string characterId, bool current, MockData data)
     {
         var selector = context.Request.Query["season"];
 
@@ -30,7 +28,7 @@ public static class WowRosterEndpoints
             return ApiResponses.Problem(context, "character_not_found", 404);
         }
 
-        if (current && (data.FailedCurrentIds.Contains(characterId) || failures.FailCurrentScore(characterId)))
+        if (current && data.FailedCurrentIds.Contains(characterId))
         {
             return ApiResponses.Problem(context, "data_unavailable", 503);
         }
