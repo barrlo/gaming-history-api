@@ -19,3 +19,7 @@ Select the current season using `startsAt <= clock < endsAt`. Keep stable season
 When an end is unknown, use the next configured season's start as the end, even if it is later than nine months after the current start. With no configured successor, use nine calendar months, preserving UTC time and clamping to the destination month's last day. Both inferred end forms retain `endDateEstimated: true`; an announced end takes precedence. An estimated end never invents a successor's identity.
 
 WoW North America resets Tuesday at 15:00 UTC throughout the year. Season weeks clip that weekly interval to the season start and end; exact reset instants belong to the new week. The mock adapter resolves season metadata at the manifest's frozen clock and refuses to relabel a fixture with a different season ID. History and score calculations remain fixture-backed until the projection checkpoint.
+
+## Roster field naming revision
+
+The PoE and PoE2 roster responses use `leagues` (replacing `groups`). Each entry remains a league family; character entries retain their specific league variant. This reviewed contract rename requires matching UI and API versions. Coordinate API PR #5 with the companion UI rename PR; the prior hosted Swagger validation predates this revision.

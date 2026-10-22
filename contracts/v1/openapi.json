@@ -566,7 +566,7 @@
                 },
                 "example": {
                   "game": "poe",
-                  "groups": [
+                  "leagues": [
                     {
                       "id": "demo-family",
                       "name": "Emberfall",
@@ -1982,7 +1982,7 @@
                 },
                 "example": {
                   "game": "poe2",
-                  "groups": [
+                  "leagues": [
                     {
                       "id": "demo-family",
                       "name": "Emberfall",
@@ -4044,7 +4044,7 @@
               "poe2"
             ]
           },
-          "groups": {
+          "leagues": {
             "type": "array",
             "items": {
               "type": "object",
@@ -4080,9 +4080,9 @@
         },
         "required": [
           "game",
-          "groups"
+          "leagues"
         ],
-        "description": "Stored data only, including archived participation. Groups by league family, start descending (unknown last), then ID. Characters level descending, case-insensitive name then character ID then league ID. Empty groups omitted."
+        "description": "Stored data only, including archived participation. Groups by league family, start descending (unknown last), then ID. Characters level descending, case-insensitive name then character ID then league ID. Empty league families omitted."
       },
       "PoeItemProperty": {
         "type": "object",

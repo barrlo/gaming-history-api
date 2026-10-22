@@ -43,9 +43,9 @@ public sealed class PoeRosterData
             var tracking = archived.RootElement.GetProperty("tracking").Deserialize<PoeTracking>(JsonOptions)!;
             roster = roster with
             {
-                Groups = roster.Groups.Select(group => group with
+                Leagues = roster.Leagues.Select(league => league with
                 {
-                    Characters = group.Characters.Select(entry => entry with { Tracking = tracking }).ToArray()
+                    Characters = league.Characters.Select(entry => entry with { Tracking = tracking }).ToArray()
                 }).ToArray()
             };
         }

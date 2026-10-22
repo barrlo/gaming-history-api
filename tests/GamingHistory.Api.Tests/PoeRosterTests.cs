@@ -30,8 +30,9 @@ public sealed class PoeRosterTests
         Assert.Equal(JsonSerializer.Serialize(expected!.Ordered()), JsonSerializer.Serialize(actual));
         Assert.Equal(game, actual!.Game);
         Assert.True(body.RootElement.TryGetProperty("game", out _));
-        Assert.True(body.RootElement.GetProperty("groups")[0].GetProperty("characters")[0].GetProperty("character").TryGetProperty("class", out _));
-        Assert.Equal(ObservedAt, actual.Groups[0].Characters[0].ObservedAt);
+        Assert.False(body.RootElement.TryGetProperty("groups", out _));
+        Assert.True(body.RootElement.GetProperty("leagues")[0].GetProperty("characters")[0].GetProperty("character").TryGetProperty("class", out _));
+        Assert.Equal(ObservedAt, actual.Leagues[0].Characters[0].ObservedAt);
     }
 
     [Theory]
@@ -44,8 +45,8 @@ public sealed class PoeRosterTests
         var empty = await client.GetFromJsonAsync<PoeRoster>($"/api/v1/{game}/characters");
         var populated = await client.GetFromJsonAsync<PoeRoster>($"/api/v1/{otherGame}/characters");
 
-        Assert.Empty(empty!.Groups);
-        Assert.NotEmpty(populated!.Groups);
+        Assert.Empty(empty!.Leagues);
+        Assert.NotEmpty(populated!.Leagues);
     }
 
     [Theory]
@@ -56,7 +57,7 @@ public sealed class PoeRosterTests
         await using var factory = CreateFactory(game, "archived");
         using var client = factory.CreateClient();
         var roster = await client.GetFromJsonAsync<PoeRoster>($"/api/v1/{game}/characters");
-        var entry = Assert.Single(Assert.Single(roster!.Groups).Characters);
+        var entry = Assert.Single(Assert.Single(roster!.Leagues).Characters);
 
         Assert.Equal("archived", entry.Tracking.Status);
         Assert.Equal("permanentMigration", entry.Tracking.Reason);
@@ -83,7 +84,7 @@ public sealed class PoeRosterTests
     }
 
     [Fact]
-    public void ShouldOrderLeagueFamiliesAndOmitEmptyGroups()
+    public void ShouldOrderLeagueFamiliesAndOmitEmptyLeagues()
     {
         var entry = Entry("Ash", "aaa", 18);
         var roster = new PoeRoster("poe", [
@@ -95,8 +96,8 @@ public sealed class PoeRosterTests
         ]);
         var ordered = roster.Ordered();
 
-        Assert.Equal(["aaa", "zzz", "old", "unknown"], ordered.Groups.Select(group => group.Id));
-        Assert.Equal(5, roster.Groups.Length);
+        Assert.Equal(["aaa", "zzz", "old", "unknown"], ordered.Leagues.Select(league => league.Id));
+        Assert.Equal(5, roster.Leagues.Length);
     }
 
     [Fact]
@@ -116,7 +117,7 @@ public sealed class PoeRosterTests
             }
         };
         var roster = new PoeRoster("poe", [new([lower, tieLast, tieName, variant, tieId, higher], "family", "Family", ObservedAt)]);
-        var entries = roster.Ordered().Groups[0].Characters;
+        var entries = roster.Ordered().Leagues[0].Characters;
 
         Assert.Equal([higher, tieId, variant, tieName, tieLast, lower], entries);
         Assert.Equal("none", lower.Character.Ascendancy.Status);
