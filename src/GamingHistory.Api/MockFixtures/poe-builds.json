@@ -1,0 +1,878 @@
+{
+  "latest": [
+    {
+      "build": {
+        "game": "poe",
+        "character": {
+          "id": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "name": "OldFlame",
+          "class": "Witch",
+          "ascendancy": {
+            "status": "known",
+            "name": "Elementalist"
+          },
+          "level": 96
+        },
+        "league": {
+          "id": "demo-tidefall",
+          "name": "Tidefall",
+          "startAt": "2026-05-01T19:00:00Z",
+          "endAt": "2026-08-28T19:00:00Z",
+          "rules": []
+        },
+        "observedAt": "2026-08-28T08:00:00Z",
+        "definitionVersion": "fictional-2026-09",
+        "equipment": {
+          "availability": "available",
+          "entries": [
+            {
+              "name": "Ember Ward",
+              "typeLine": "Example Robe",
+              "baseType": "Example Robe",
+              "identified": true,
+              "ilvl": 18,
+              "frameTypeId": "rare",
+              "inventoryId": "BodyArmour",
+              "properties": [
+                {
+                  "name": "Energy Shield",
+                  "values": [
+                    [
+                      "42",
+                      0
+                    ]
+                  ],
+                  "displayMode": 0
+                }
+              ],
+              "explicitMods": [
+                {
+                  "description": "+20 to maximum Life"
+                }
+              ]
+            }
+          ]
+        },
+        "skills": {
+          "availability": "available",
+          "entries": [
+            {
+              "id": "group-1",
+              "skills": [
+                {
+                  "name": "Example Skill",
+                  "level": 3,
+                  "quality": 0
+                }
+              ],
+              "supports": [
+                {
+                  "name": "Example Support",
+                  "level": 3,
+                  "quality": 0
+                }
+              ]
+            }
+          ]
+        },
+        "ascendancySkills": {
+          "availability": "available",
+          "entries": [
+            {
+              "id": "asc-example",
+              "name": "Example Ascendancy Allocation",
+              "stats": [
+                "Example effect"
+              ],
+              "definitionStatus": "resolved",
+              "setIds": [],
+              "selectedEffectId": null
+            }
+          ]
+        },
+        "passiveSkills": {
+          "availability": "available",
+          "entries": [
+            {
+              "id": "passive-example",
+              "name": "Example Passive Allocation",
+              "stats": [
+                "+10 to Intelligence"
+              ],
+              "definitionStatus": "resolved",
+              "setIds": [
+                "default"
+              ],
+              "selectedEffectId": null
+            }
+          ]
+        }
+      },
+      "tracking": {
+        "status": "archived",
+        "reason": "leagueEnded",
+        "firstSeenAt": "2026-05-01T21:00:00Z"
+      },
+      "refresh": {
+        "status": "archived",
+        "nextAllowedAt": null,
+        "operationId": null
+      }
+    },
+    {
+      "build": {
+        "game": "poe",
+        "character": {
+          "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "name": "Ashwarden",
+          "class": "Witch",
+          "ascendancy": {
+            "status": "none",
+            "name": null
+          },
+          "level": 18
+        },
+        "league": {
+          "id": "demo-emberfall",
+          "name": "Emberfall",
+          "startAt": "2026-09-04T19:00:00Z",
+          "endAt": null,
+          "rules": []
+        },
+        "observedAt": "2026-09-20T08:00:00Z",
+        "definitionVersion": null,
+        "equipment": {
+          "availability": "available",
+          "entries": [
+            {
+              "name": "Ember Ward",
+              "typeLine": "Example Robe",
+              "baseType": "Example Robe",
+              "identified": true,
+              "ilvl": 18,
+              "frameTypeId": "rare",
+              "inventoryId": "BodyArmour",
+              "properties": [
+                {
+                  "name": "Energy Shield",
+                  "values": [
+                    [
+                      "42",
+                      0
+                    ]
+                  ],
+                  "displayMode": 0
+                }
+              ],
+              "explicitMods": [
+                {
+                  "description": "+20 to maximum Life"
+                }
+              ]
+            }
+          ]
+        },
+        "skills": {
+          "availability": "available",
+          "entries": [
+            {
+              "id": "group-1",
+              "skills": [
+                {
+                  "name": "Example Skill",
+                  "level": 3,
+                  "quality": 0
+                }
+              ],
+              "supports": [
+                {
+                  "name": "Example Support",
+                  "level": 3,
+                  "quality": 0
+                }
+              ]
+            }
+          ]
+        },
+        "ascendancySkills": {
+          "availability": "notApplicable",
+          "entries": []
+        },
+        "passiveSkills": {
+          "availability": "unavailable",
+          "entries": []
+        }
+      },
+      "tracking": {
+        "status": "active",
+        "reason": null,
+        "firstSeenAt": "2026-09-18T21:00:00Z"
+      },
+      "refresh": {
+        "status": "available",
+        "nextAllowedAt": null,
+        "operationId": null
+      }
+    },
+    {
+      "build": {
+        "game": "poe",
+        "character": {
+          "id": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "name": "IronAsh",
+          "class": "Witch",
+          "ascendancy": {
+            "status": "known",
+            "name": "Occultist"
+          },
+          "level": 75
+        },
+        "league": {
+          "id": "demo-emberfall-hc",
+          "name": "Hardcore Emberfall",
+          "startAt": "2026-09-04T19:00:00Z",
+          "endAt": null,
+          "rules": [
+            {
+              "id": "hardcore",
+              "name": "Hardcore"
+            }
+          ]
+        },
+        "observedAt": "2026-09-20T08:00:00Z",
+        "definitionVersion": "fictional-2026-09",
+        "equipment": {
+          "availability": "available",
+          "entries": [
+            {
+              "name": "Ember Ward",
+              "typeLine": "Example Robe",
+              "baseType": "Example Robe",
+              "identified": true,
+              "ilvl": 18,
+              "frameTypeId": "rare",
+              "inventoryId": "BodyArmour",
+              "properties": [
+                {
+                  "name": "Energy Shield",
+                  "values": [
+                    [
+                      "42",
+                      0
+                    ]
+                  ],
+                  "displayMode": 0
+                }
+              ],
+              "explicitMods": [
+                {
+                  "description": "+20 to maximum Life"
+                }
+              ]
+            }
+          ]
+        },
+        "skills": {
+          "availability": "partial",
+          "entries": [
+            {
+              "id": "group-1",
+              "skills": [
+                {
+                  "name": "Example Skill",
+                  "level": 3,
+                  "quality": null
+                }
+              ],
+              "supports": [
+                {
+                  "name": "Example Support",
+                  "level": 3,
+                  "quality": 0
+                }
+              ]
+            }
+          ]
+        },
+        "ascendancySkills": {
+          "availability": "available",
+          "entries": [
+            {
+              "id": "asc-example",
+              "name": "Example Ascendancy Allocation",
+              "stats": [
+                "Example effect"
+              ],
+              "definitionStatus": "resolved",
+              "setIds": [],
+              "selectedEffectId": null
+            }
+          ]
+        },
+        "passiveSkills": {
+          "availability": "partial",
+          "entries": [
+            {
+              "id": "unresolved-example",
+              "name": null,
+              "stats": [],
+              "definitionStatus": "unavailable",
+              "setIds": [
+                "default"
+              ],
+              "selectedEffectId": null
+            }
+          ]
+        }
+      },
+      "tracking": {
+        "status": "active",
+        "reason": null,
+        "firstSeenAt": "2026-09-18T21:00:00Z"
+      },
+      "refresh": {
+        "status": "available",
+        "nextAllowedAt": null,
+        "operationId": null
+      }
+    },
+    {
+      "build": {
+        "game": "poe",
+        "character": {
+          "id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "name": "Emberwitch",
+          "class": "Witch",
+          "ascendancy": {
+            "status": "known",
+            "name": "Necromancer"
+          },
+          "level": 93
+        },
+        "league": {
+          "id": "demo-emberfall",
+          "name": "Emberfall",
+          "startAt": "2026-09-04T19:00:00Z",
+          "endAt": null,
+          "rules": []
+        },
+        "observedAt": "2026-09-20T08:00:00Z",
+        "definitionVersion": "fictional-2026-09",
+        "equipment": {
+          "availability": "available",
+          "entries": [
+            {
+              "name": "Ember Ward",
+              "typeLine": "Example Robe",
+              "baseType": "Example Robe",
+              "identified": true,
+              "ilvl": 18,
+              "frameTypeId": "rare",
+              "inventoryId": "BodyArmour",
+              "properties": [
+                {
+                  "name": "Energy Shield",
+                  "values": [
+                    [
+                      "42",
+                      0
+                    ]
+                  ],
+                  "displayMode": 0
+                }
+              ],
+              "explicitMods": [
+                {
+                  "description": "+20 to maximum Life"
+                }
+              ]
+            }
+          ]
+        },
+        "skills": {
+          "availability": "available",
+          "entries": [
+            {
+              "id": "group-1",
+              "skills": [
+                {
+                  "name": "Example Skill",
+                  "level": 3,
+                  "quality": 0
+                }
+              ],
+              "supports": [
+                {
+                  "name": "Example Support",
+                  "level": 3,
+                  "quality": 0
+                }
+              ]
+            }
+          ]
+        },
+        "ascendancySkills": {
+          "availability": "available",
+          "entries": [
+            {
+              "id": "asc-example",
+              "name": "Example Ascendancy Allocation",
+              "stats": [
+                "Example effect"
+              ],
+              "definitionStatus": "resolved",
+              "setIds": [],
+              "selectedEffectId": null
+            }
+          ]
+        },
+        "passiveSkills": {
+          "availability": "available",
+          "entries": [
+            {
+              "id": "passive-example",
+              "name": "Example Passive Allocation",
+              "stats": [
+                "+10 to Intelligence"
+              ],
+              "definitionStatus": "resolved",
+              "setIds": [
+                "default"
+              ],
+              "selectedEffectId": null
+            }
+          ]
+        }
+      },
+      "tracking": {
+        "status": "active",
+        "reason": null,
+        "firstSeenAt": "2026-09-18T21:00:00Z"
+      },
+      "refresh": {
+        "status": "available",
+        "nextAllowedAt": null,
+        "operationId": null
+      }
+    }
+  ],
+  "snapshots": [
+    {
+      "snapshot": {
+        "id": "poe-f-2026-09-19",
+        "league": {
+          "id": "demo-tidefall",
+          "name": "Tidefall",
+          "startAt": "2026-05-01T19:00:00Z",
+          "endAt": "2026-08-28T19:00:00Z",
+          "rules": []
+        },
+        "scheduledAt": "2026-09-19T08:00:00Z",
+        "historyDate": "2026-09-19",
+        "observedAt": "2026-09-19T09:00:00Z",
+        "level": 86
+      },
+      "build": {
+        "game": "poe",
+        "character": {
+          "id": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "name": "OldFlame",
+          "class": "Witch",
+          "ascendancy": {
+            "status": "known",
+            "name": "Elementalist"
+          },
+          "level": 86
+        },
+        "league": {
+          "id": "demo-tidefall",
+          "name": "Tidefall",
+          "startAt": "2026-05-01T19:00:00Z",
+          "endAt": "2026-08-28T19:00:00Z",
+          "rules": []
+        },
+        "observedAt": "2026-09-19T09:00:00Z",
+        "definitionVersion": "fictional-2026-09",
+        "equipment": {
+          "availability": "available",
+          "entries": [
+            {
+              "name": "Ember Ward",
+              "typeLine": "Example Robe",
+              "baseType": "Example Robe",
+              "identified": true,
+              "ilvl": 18,
+              "frameTypeId": "rare",
+              "inventoryId": "BodyArmour",
+              "properties": [
+                {
+                  "name": "Energy Shield",
+                  "values": [
+                    [
+                      "42",
+                      0
+                    ]
+                  ],
+                  "displayMode": 0
+                }
+              ],
+              "explicitMods": [
+                {
+                  "description": "+20 to maximum Life"
+                }
+              ]
+            }
+          ]
+        },
+        "skills": {
+          "availability": "available",
+          "entries": [
+            {
+              "id": "group-1",
+              "skills": [
+                {
+                  "name": "Example Skill",
+                  "level": 3,
+                  "quality": 0
+                }
+              ],
+              "supports": [
+                {
+                  "name": "Example Support",
+                  "level": 3,
+                  "quality": 0
+                }
+              ]
+            }
+          ]
+        },
+        "ascendancySkills": {
+          "availability": "available",
+          "entries": [
+            {
+              "id": "asc-example",
+              "name": "Example Ascendancy Allocation",
+              "stats": [
+                "Example effect"
+              ],
+              "definitionStatus": "resolved",
+              "setIds": [],
+              "selectedEffectId": null
+            }
+          ]
+        },
+        "passiveSkills": {
+          "availability": "available",
+          "entries": [
+            {
+              "id": "passive-example",
+              "name": "Example Passive Allocation",
+              "stats": [
+                "+10 to Intelligence"
+              ],
+              "definitionStatus": "resolved",
+              "setIds": [
+                "default"
+              ],
+              "selectedEffectId": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "snapshot": {
+        "id": "poe-a-2026-09-19",
+        "league": {
+          "id": "demo-emberfall",
+          "name": "Emberfall",
+          "startAt": "2026-09-04T19:00:00Z",
+          "endAt": null,
+          "rules": []
+        },
+        "scheduledAt": "2026-09-19T08:00:00Z",
+        "historyDate": "2026-09-19",
+        "observedAt": "2026-09-19T09:00:00Z",
+        "level": 8
+      },
+      "build": {
+        "game": "poe",
+        "character": {
+          "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "name": "Ashwarden",
+          "class": "Witch",
+          "ascendancy": {
+            "status": "none",
+            "name": null
+          },
+          "level": 8
+        },
+        "league": {
+          "id": "demo-emberfall",
+          "name": "Emberfall",
+          "startAt": "2026-09-04T19:00:00Z",
+          "endAt": null,
+          "rules": []
+        },
+        "observedAt": "2026-09-19T09:00:00Z",
+        "definitionVersion": null,
+        "equipment": {
+          "availability": "available",
+          "entries": [
+            {
+              "name": "Ember Ward",
+              "typeLine": "Example Robe",
+              "baseType": "Example Robe",
+              "identified": true,
+              "ilvl": 18,
+              "frameTypeId": "rare",
+              "inventoryId": "BodyArmour",
+              "properties": [
+                {
+                  "name": "Energy Shield",
+                  "values": [
+                    [
+                      "42",
+                      0
+                    ]
+                  ],
+                  "displayMode": 0
+                }
+              ],
+              "explicitMods": [
+                {
+                  "description": "+20 to maximum Life"
+                }
+              ]
+            }
+          ]
+        },
+        "skills": {
+          "availability": "available",
+          "entries": [
+            {
+              "id": "group-1",
+              "skills": [
+                {
+                  "name": "Example Skill",
+                  "level": 3,
+                  "quality": 0
+                }
+              ],
+              "supports": [
+                {
+                  "name": "Example Support",
+                  "level": 3,
+                  "quality": 0
+                }
+              ]
+            }
+          ]
+        },
+        "ascendancySkills": {
+          "availability": "notApplicable",
+          "entries": []
+        },
+        "passiveSkills": {
+          "availability": "unavailable",
+          "entries": []
+        }
+      }
+    },
+    {
+      "snapshot": {
+        "id": "poe-c-2026-09-19",
+        "league": {
+          "id": "demo-emberfall",
+          "name": "Emberfall",
+          "startAt": "2026-09-04T19:00:00Z",
+          "endAt": null,
+          "rules": []
+        },
+        "scheduledAt": "2026-09-19T08:00:00Z",
+        "historyDate": "2026-09-19",
+        "observedAt": "2026-09-19T09:00:00Z",
+        "level": 83
+      },
+      "build": {
+        "game": "poe",
+        "character": {
+          "id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "name": "Emberwitch",
+          "class": "Witch",
+          "ascendancy": {
+            "status": "known",
+            "name": "Necromancer"
+          },
+          "level": 83
+        },
+        "league": {
+          "id": "demo-emberfall",
+          "name": "Emberfall",
+          "startAt": "2026-09-04T19:00:00Z",
+          "endAt": null,
+          "rules": []
+        },
+        "observedAt": "2026-09-19T09:00:00Z",
+        "definitionVersion": "fictional-2026-09",
+        "equipment": {
+          "availability": "available",
+          "entries": [
+            {
+              "name": "Ember Ward",
+              "typeLine": "Example Robe",
+              "baseType": "Example Robe",
+              "identified": true,
+              "ilvl": 18,
+              "frameTypeId": "rare",
+              "inventoryId": "BodyArmour",
+              "properties": [
+                {
+                  "name": "Energy Shield",
+                  "values": [
+                    [
+                      "42",
+                      0
+                    ]
+                  ],
+                  "displayMode": 0
+                }
+              ],
+              "explicitMods": [
+                {
+                  "description": "+20 to maximum Life"
+                }
+              ]
+            }
+          ]
+        },
+        "skills": {
+          "availability": "available",
+          "entries": [
+            {
+              "id": "group-1",
+              "skills": [
+                {
+                  "name": "Example Skill",
+                  "level": 3,
+                  "quality": 0
+                }
+              ],
+              "supports": [
+                {
+                  "name": "Example Support",
+                  "level": 3,
+                  "quality": 0
+                }
+              ]
+            }
+          ]
+        },
+        "ascendancySkills": {
+          "availability": "available",
+          "entries": [
+            {
+              "id": "asc-example",
+              "name": "Example Ascendancy Allocation",
+              "stats": [
+                "Example effect"
+              ],
+              "definitionStatus": "resolved",
+              "setIds": [],
+              "selectedEffectId": null
+            }
+          ]
+        },
+        "passiveSkills": {
+          "availability": "available",
+          "entries": [
+            {
+              "id": "passive-example",
+              "name": "Example Passive Allocation",
+              "stats": [
+                "+10 to Intelligence"
+              ],
+              "definitionStatus": "resolved",
+              "setIds": [
+                "default"
+              ],
+              "selectedEffectId": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "snapshot": {
+        "id": "poe-c-2026-09-18",
+        "league": {
+          "id": "demo-emberfall",
+          "name": "Emberfall",
+          "startAt": "2026-09-04T19:00:00Z",
+          "endAt": null,
+          "rules": []
+        },
+        "scheduledAt": "2026-09-18T08:00:00Z",
+        "historyDate": "2026-09-18",
+        "observedAt": "2026-09-18T09:00:00Z",
+        "level": 73
+      },
+      "build": {
+        "game": "poe",
+        "character": {
+          "id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "name": "Emberwitch",
+          "class": "Witch",
+          "ascendancy": {
+            "name": null,
+            "status": "none"
+          },
+          "level": 73
+        },
+        "league": {
+          "id": "demo-emberfall",
+          "name": "Emberfall",
+          "startAt": "2026-09-04T19:00:00Z",
+          "endAt": null,
+          "rules": []
+        },
+        "observedAt": "2026-09-18T09:00:00Z",
+        "definitionVersion": "fictional-2026-09",
+        "equipment": {
+          "availability": "available",
+          "entries": []
+        },
+        "skills": {
+          "availability": "available",
+          "entries": [
+            {
+              "id": "group-1",
+              "skills": [
+                {
+                  "name": "Example Skill",
+                  "level": 3,
+                  "quality": 0
+                }
+              ],
+              "supports": [
+                {
+                  "name": "Example Support",
+                  "level": 3,
+                  "quality": 0
+                }
+              ]
+            }
+          ]
+        },
+        "ascendancySkills": {
+          "availability": "notApplicable",
+          "entries": []
+        },
+        "passiveSkills": {
+          "availability": "available",
+          "entries": []
+        }
+      }
+    }
+  ]
+}
