@@ -2,6 +2,7 @@ using GamingHistory.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<MockData>();
+builder.Services.AddSingleton<PoeRosterData>();
 var app = builder.Build();
 var data = app.Services.GetRequiredService<MockData>();
 ApiLog.MockMode(app.Logger, data.Scenario, data.Clock);
@@ -30,6 +31,7 @@ app.MapGet("/api/openapi/v1.json", () => Results.Text(data.Spec, "application/js
 app.MapGet("/api/v1/wow/characters", (HttpContext context) => ApiResponses.Fixture(context, data.Roster));
 app.MapGet("/api/v1/wow/characters/{characterId}/history", (HttpContext context, string characterId) => ReadCharacter(context, characterId, false));
 app.MapGet("/api/v1/wow/characters/{characterId}/current-score", (HttpContext context, string characterId) => ReadCharacter(context, characterId, true));
+app.MapPoeRosterEndpoints();
 app.Run();
 
 return;
