@@ -6,6 +6,7 @@ namespace GamingHistory.Api;
 // Frozen observations keep the read API independent of the pending physical storage decision.
 public sealed class PoeBuildData<TSupport>
 {
+    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
     private readonly Dictionary<string, PoeLatest<TSupport>> _latest;
     private readonly PoeSnapshot<TSupport>[] _snapshots;
     private readonly string _game;
@@ -14,11 +15,11 @@ public sealed class PoeBuildData<TSupport>
     {
         _game = game;
         var path = Path.Combine(AppContext.BaseDirectory, "MockFixtures", $"{game}-builds.json");
-        var collection = JsonSerializer.Deserialize<PoeBuildCollection<TSupport>>(File.ReadAllText(path),
-            new JsonSerializerOptions(JsonSerializerDefaults.Web))!;
-        _latest = collection.Latest.ToDictionary(latest => latest.Build.Character.Id, StringComparer.Ordinal);
-        _snapshots = collection.Snapshots.OrderByDescending(snapshot => snapshot.Snapshot.ScheduledAt)
-            .ThenBy(snapshot => snapshot.Snapshot.Id, StringComparer.Ordinal).ToArray();
+        var fixtures = JsonSerializer.Deserialize<PoeBuildFixtures<TSupport>>(File.ReadAllText(path),
+            JsonOptions)!;
+        _latest = fixtures.Latest.ToDictionary(latest => latest.Build.Character.Id, StringComparer.Ordinal);
+        _snapshots = [.. fixtures.Snapshots.OrderByDescending(snapshot => snapshot.Snapshot.ScheduledAt)
+            .ThenBy(snapshot => snapshot.Snapshot.Id, StringComparer.Ordinal)];
     }
 
     public PoeLatest<TSupport>? ReadLatest(PoeRosterEntry entry)

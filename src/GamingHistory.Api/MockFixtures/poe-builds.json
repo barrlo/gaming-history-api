@@ -459,7 +459,7 @@
   "snapshots": [
     {
       "snapshot": {
-        "id": "poe-f-2026-09-19",
+        "id": "poe-f-2026-08-27",
         "league": {
           "id": "demo-tidefall",
           "name": "Tidefall",
@@ -467,9 +467,9 @@
           "endAt": "2026-08-28T19:00:00Z",
           "rules": []
         },
-        "scheduledAt": "2026-09-19T08:00:00Z",
-        "historyDate": "2026-09-19",
-        "observedAt": "2026-09-19T09:00:00Z",
+        "scheduledAt": "2026-08-27T08:00:00Z",
+        "historyDate": "2026-08-27",
+        "observedAt": "2026-08-27T09:00:00Z",
         "level": 86
       },
       "build": {
@@ -491,7 +491,7 @@
           "endAt": "2026-08-28T19:00:00Z",
           "rules": []
         },
-        "observedAt": "2026-09-19T09:00:00Z",
+        "observedAt": "2026-08-27T09:00:00Z",
         "definitionVersion": "fictional-2026-09",
         "equipment": {
           "availability": "available",

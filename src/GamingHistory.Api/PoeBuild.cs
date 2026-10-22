@@ -154,4 +154,4 @@ public sealed record PoeSnapshotSummary(DateOnly HistoryDate, string Id, PoeLeag
     DateTimeOffset ObservedAt, DateTimeOffset ScheduledAt);
 public sealed record PoeSnapshot<TSupport>(PoeBuild<TSupport> Build, PoeSnapshotSummary Snapshot);
 public sealed record PoeSnapshots(string? NextCursor, PoeSnapshotSummary[] Snapshots);
-public sealed record PoeBuildCollection<TSupport>(PoeLatest<TSupport>[] Latest, PoeSnapshot<TSupport>[] Snapshots);
+public sealed record PoeBuildFixtures<TSupport>(PoeLatest<TSupport>[] Latest, PoeSnapshot<TSupport>[] Snapshots);

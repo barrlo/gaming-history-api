@@ -10,6 +10,8 @@ namespace GamingHistory.Api.Tests;
 
 public sealed class PoeBuildTests
 {
+    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
+
     [Theory]
     [InlineData("poe")]
     [InlineData("poe2")]
@@ -25,13 +27,12 @@ public sealed class PoeBuildTests
             using var response = await client.GetAsync($"/api/v1/{game}/characters/{entry.Character.Id}/build");
             var body = JsonNode.Parse(await response.Content.ReadAsStringAsync())!;
             var expected = fixtures["latest"]!.AsArray().Single(latest => latest!["build"]!["character"]!["id"]!.GetValue<string>() == entry.Character.Id);
-            var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
             var normalized = game == "poe"
-                ? JsonSerializer.SerializeToNode(expected.Deserialize<PoeLatest<PoeGem>>(options), options)
-                : JsonSerializer.SerializeToNode(expected.Deserialize<PoeLatest<Poe2Support>>(options), options);
+                ? JsonSerializer.SerializeToNode(expected.Deserialize<PoeLatest<PoeGem>>(JsonOptions), JsonOptions)
+                : JsonSerializer.SerializeToNode(expected.Deserialize<PoeLatest<Poe2Support>>(JsonOptions), JsonOptions);
             var build = body["build"]!;
-            var identity = build["character"]!.Deserialize<PoeIdentity>(new JsonSerializerOptions(JsonSerializerDefaults.Web));
-            var tracking = body["tracking"]!.Deserialize<PoeTracking>(new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            var identity = build["character"]!.Deserialize<PoeIdentity>(JsonOptions);
+            var tracking = body["tracking"]!.Deserialize<PoeTracking>(JsonOptions);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.True(response.Headers.CacheControl!.NoStore);
@@ -41,6 +42,10 @@ public sealed class PoeBuildTests
             Assert.Equal(entry.Tracking, tracking);
             Assert.Equal(entry.ObservedAt, build["observedAt"]!.GetValue<DateTimeOffset>());
             Assert.Equal(entry.League.Id, build["league"]!["id"]!.GetValue<string>());
+
+            var history = await client.GetFromJsonAsync<PoeSnapshots>($"/api/v1/{game}/characters/{entry.Character.Id}/snapshots");
+
+            Assert.All(history!.Snapshots, summary => Assert.True(summary.ObservedAt <= entry.ObservedAt));
         }
     }
 
