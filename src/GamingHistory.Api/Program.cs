@@ -3,6 +3,7 @@ using GamingHistory.Api;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<MockData>();
 builder.Services.AddSingleton<MockFailurePlan>();
+builder.Services.AddSingleton<PoeRosterData>();
 var app = builder.Build();
 var data = app.Services.GetRequiredService<MockData>();
 ApiLog.MockMode(app.Logger, data.Scenario, data.Clock);
@@ -29,4 +30,5 @@ app.UseSwaggerUI(options =>
 app.MapGet("/health", () => Results.Json(new { status = "ok" }));
 app.MapGet("/api/openapi/v1.json", () => Results.Text(data.Spec, "application/json"));
 app.MapWowRosterEndpoints();
+app.MapPoeRosterEndpoints();
 app.Run();
