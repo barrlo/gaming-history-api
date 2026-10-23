@@ -4,11 +4,13 @@ using System.Text.Json.Nodes;
 
 namespace GamingHistory.Api;
 
-// This adapter deliberately replays approved fixtures. It is not a production provider or cache.
+// This adapter uses fictional observations and current-score fixtures, not a production provider or cache.
 public sealed class MockData
 {
     private readonly string _fixtureRoot;
     private readonly Season? _season;
+    private readonly WowObservation[] _observations;
+    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
     public string Scenario
     {
         get;
@@ -65,6 +67,8 @@ public sealed class MockData
 
         var calendar = new SeasonCalendar(definitions);
         _season = calendar.GetCurrentSeason(DateTimeOffset.Parse(Clock, CultureInfo.InvariantCulture));
+        _observations = JsonSerializer.Deserialize<WowObservation[]>(
+            File.ReadAllText(Path.Combine(_fixtureRoot, Scenario, "observations.json")), JsonOptions)!;
         Roster = ApplySeason(File.ReadAllText(Path.Combine(_fixtureRoot, Scenario, "roster.json")));
         using var roster = JsonDocument.Parse(Roster);
         CharacterIds = roster.RootElement.GetProperty("characters").EnumerateArray()
@@ -72,8 +76,29 @@ public sealed class MockData
         FailedCurrentIds = configuration.GetSection("Mock:CurrentFailureCharacterIds").Get<string[]>()?.ToHashSet(StringComparer.Ordinal) ?? [];
     }
 
-    public string ReadCharacter(string characterId, bool current) =>
-        ApplySeason(File.ReadAllText(Path.Combine(_fixtureRoot, Scenario, $"{characterId}{(current ? "-current" : "")}.json")));
+    public string ReadCharacter(string characterId, bool current)
+    {
+        if (current)
+        {
+            return ApplySeason(File.ReadAllText(Path.Combine(_fixtureRoot, Scenario, $"{characterId}-current.json")));
+        }
+
+        var roster = JsonNode.Parse(Roster)!;
+        var character = roster["characters"]!.AsArray()
+            .Single(item => item!["id"]!.GetValue<string>() == characterId)!.DeepClone();
+        var history = WowHistory.Project(characterId, _season,
+            DateTimeOffset.Parse(Clock, CultureInfo.InvariantCulture), _observations);
+        var response = new JsonObject
+        {
+            ["character"] = character,
+            ["dataMode"] = "mock",
+            ["season"] = roster["season"]?.DeepClone(),
+            ["weeks"] = JsonSerializer.SerializeToNode(history.Weeks, JsonOptions),
+            ["weeklySummary"] = JsonSerializer.SerializeToNode(history.WeeklySummary, JsonOptions)
+        };
+
+        return response.ToJsonString();
+    }
 
     private string ApplySeason(string fixture)
     {
