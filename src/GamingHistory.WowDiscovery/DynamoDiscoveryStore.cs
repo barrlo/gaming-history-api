@@ -20,9 +20,9 @@ public sealed class DynamoDiscoveryStore(IAmazonDynamoDB client, string tableNam
         {
             await client.CreateTableAsync(new CreateTableRequest
             {
-                AttributeDefinitions = [new("PK", ScalarAttributeType.S), new("SK", ScalarAttributeType.S)],
+                AttributeDefinitions = [new AttributeDefinition("PK", ScalarAttributeType.S), new AttributeDefinition("SK", ScalarAttributeType.S)],
                 BillingMode = BillingMode.PAY_PER_REQUEST,
-                KeySchema = [new("PK", KeyType.HASH), new("SK", KeyType.RANGE)],
+                KeySchema = [new KeySchemaElement("PK", KeyType.HASH), new KeySchemaElement("SK", KeyType.RANGE)],
                 TableName = tableName
             }, cancellationToken);
         }
@@ -57,7 +57,7 @@ public sealed class DynamoDiscoveryStore(IAmazonDynamoDB client, string tableNam
             {
                 ConsistentRead = true,
                 ExclusiveStartKey = cursor,
-                ExpressionAttributeValues = new() { [":partition"] = new($"{Scope}#GEN#{generation}") },
+                ExpressionAttributeValues = new() { [":partition"] = new AttributeValue($"{Scope}#GEN#{generation}") },
                 KeyConditionExpression = "PK = :partition",
                 TableName = tableName
             }, cancellationToken);

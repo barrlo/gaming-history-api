@@ -41,6 +41,6 @@ public static class DiscoveryReconciliation
             };
         }
 
-        return new DiscoverySnapshot(ownerId, Guid.NewGuid().ToString("N"), characters.Values.ToArray());
+        return new DiscoverySnapshot(ownerId, Guid.NewGuid().ToString("N"), [.. characters.Values]);
     }
 }

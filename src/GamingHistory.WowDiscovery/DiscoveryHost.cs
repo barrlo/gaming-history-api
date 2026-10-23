@@ -64,7 +64,7 @@ public static class DiscoveryHost
                         .FetchAsync(context.AccessToken, context.HttpContext.RequestAborted);
                     var snapshot = DiscoveryReconciliation.Reconcile(roster.OwnerId, roster.Characters, previous, maximumLevel);
                     await store.SaveAsync(snapshot, previous?.Generation, context.HttpContext.RequestAborted);
-                    context.Properties.Items["eligible"] = snapshot.Characters.Count(character => character.IsEligible).ToString();
+                    context.Properties.Items["eligible"] = snapshot.Characters.Count(character => character.IsEligible).ToString(System.Globalization.CultureInfo.InvariantCulture);
                 };
                 options.Events.OnTicketReceived = async context =>
                 {
@@ -95,7 +95,7 @@ public static class DiscoveryHost
 
             context.Response.Headers.CacheControl = "no-store";
             context.Response.Headers["Referrer-Policy"] = "no-referrer";
-            context.Response.Headers["Content-Security-Policy"] = "default-src 'none'; form-action 'self'; frame-ancestors 'none'";
+            context.Response.Headers.ContentSecurityPolicy = "default-src 'none'; form-action 'self'; frame-ancestors 'none'";
             await next(context);
         });
         app.UseAuthentication();

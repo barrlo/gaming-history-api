@@ -1,5 +1,4 @@
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 using GamingHistory.WowDiscovery;
 using Microsoft.AspNetCore.Authentication.OAuth;
@@ -117,7 +116,7 @@ public sealed class DiscoveryOAuthTests
         Assert.Equal("https://oauth.battle.net/authorize", location.GetLeftPart(UriPartial.Path));
         Assert.Equal("wow.profile", query["scope"]);
         Assert.Equal("https://localhost/signin-battlenet", query["redirect_uri"]);
-        Assert.Equal($"Basic {Convert.ToBase64String(Encoding.UTF8.GetBytes("test-client:test-secret"))}", upstream.TokenAuthorization);
+        Assert.Equal($"Basic {Convert.ToBase64String("test-client:test-secret"u8)}", upstream.TokenAuthorization);
         Assert.Contains("code=test-code", upstream.TokenBody);
         Assert.DoesNotContain("client_secret", upstream.TokenBody);
         Assert.Equal("Bearer test-token", upstream.RosterAuthorization);
