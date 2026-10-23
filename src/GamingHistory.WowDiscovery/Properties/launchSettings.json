@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "discovery": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "launchBrowser": false
+    }
+  }
+}
